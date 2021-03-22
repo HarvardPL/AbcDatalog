@@ -1,4 +1,4 @@
-#Introduction
+# Introduction
 
 AbcDatalog is an open-source, Java-based implementation of the logic programming
 language Datalog. It provides ready-to-use implementations of common Datalog
@@ -11,20 +11,20 @@ AbcDatalog is released under a BSD License, a copy of which is included in this
 directory.
 
 
-#Requirements
+# Requirements
 
 AbcDatalog must be compiled with Java 8. In addition, the included build script
 requires Ant 1.9.0+.
 
 
-#Compilation
+# Compilation
 
 AbcDatalog can be compiled using the included build script. From this directory,
 run `ant compile`. An executable JAR that launches the graphical user interface
 can be built by running `ant build-gui`.
 
 
-#People
+# People
 
 The primary contributors to AbcDatalog are:
 
@@ -34,6 +34,6 @@ The primary contributors to AbcDatalog are:
 
 Please email bembenek@g.harvard.edu with questions, comments, and bug reports.
 
-#Acknowledgements
+# Acknowledgements
 
 AbcDatalog has been developed as part of the Privacy Tools for Sharing Research Data project at Harvard University and is supported by the National Science Foundation under Grant Nos. 1237235 and 1054172.
