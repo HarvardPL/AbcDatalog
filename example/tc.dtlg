@@ -1,0 +1,45 @@
+% A program that computes graph transitive closure.
+
+% The `edge` predicate is an EDB. That is, it represents facts known before
+% evaluation. Predicates and constants begin with lowercase letters.
+edge(a,b).
+edge(b,c).
+edge(c,c).
+edge(c,d).
+
+% The `tc` predicate is an IDB. That is, it represents facts that are generated
+% during evaluation. Variables begin with uppercase letters.
+tc(X,Y) :- edge(X,Y).
+tc(X,Y) :- edge(X,Z), tc(Z,Y).
+
+% After we have loaded the program, we can query the existence of certain facts.
+% For instance, to see the entire transitive closure relationship we'd query
+% `tc(X,Y)?`, and to see every node reachable from `a` we'd query `tc(a,X)?`.
+
+% We could alternatively compute transitive closure this way, using non-linear
+% recursion.
+tc_nonlinear(X,Y) :- edge(X,Y).
+tc_nonlinear(X,Y) :- tc_nonlinear(X,Z), tc_nonlinear(Z,Y).
+
+% We have a few different options if we want to compute every node that is part
+% of a cycle. The following two programs will generate the same relation:
+in_cycle1(X) :- tc(X,Y), X=Y.
+in_cycle2(X) :- tc(X,X).
+% The operator `=` explicitly unifies two terms.
+
+% Similarly, the operator `!=` explicitly disunifies two terms. For example,
+% the following rule computes a relation consisting of members of `tc` where
+% the first argument of the tuple is different than the second one.
+distinct_tc(X,Y) :- tc(X,Y), X!=Y.
+
+% We can use negation to compute the pairs of nodes that are not in the `tc`
+% relationship.
+node(X) :- edge(X,_).
+node(X) :- edge(_,X).
+not_tc(X,Y) :- node(X), node(Y), not tc(X,Y).
+% We needed to create the `node` relation so that we would have a way to bind
+% the variables `X` and `Y` in the `not_tc` rule. The following statement of
+% the rule is invalid because `X` and `Y` are not bound:
+% invalid_not_tc(X,Y) :- not tc(X,Y).
+% A variable is bound if it appears in a positive (i.e., non-negated) body atom,
+% or is explicitly unified with a constant or a variable that is bound.
