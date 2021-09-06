@@ -1,4 +1,4 @@
-package edu.harvard.seas.pl.abcdatalog.example;
+package edu.harvard.seas.pl.abcdatalog.engine;
 
 /*-
  * #%L
@@ -43,15 +43,14 @@ import edu.harvard.seas.pl.abcdatalog.ast.PredicateSym;
 import edu.harvard.seas.pl.abcdatalog.ast.Term;
 import edu.harvard.seas.pl.abcdatalog.ast.Variable;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
-import edu.harvard.seas.pl.abcdatalog.engine.DatalogEngine;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.sequential.SemiNaiveEngine;
 import edu.harvard.seas.pl.abcdatalog.parser.DatalogParseException;
 import edu.harvard.seas.pl.abcdatalog.parser.DatalogParser;
 import edu.harvard.seas.pl.abcdatalog.parser.DatalogTokenizer;
 
-public final class Example {
+public final class EngineExample {
 
-	private Example() {
+	private EngineExample() {
 		throw new AssertionError("impossible");
 	}
 	
