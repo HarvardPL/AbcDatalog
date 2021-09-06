@@ -3,21 +3,74 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.githhub.aaronbembenek</groupId>
-	<artifactId>abcDatalog</artifactId>
-	<version>0.3</version>
-	<packaging>jar</packaging>
+	<groupId>edu.harvard.seas.pl</groupId>
+	<artifactId>AbcDatalog</artifactId>
+	<version>0.4.0</version>
 
-	<name>abcDatalog</name>
+	<name>AbcDatalog</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
 		</dependency>
-	</dependencies>
+  </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>edu.harvard.seas.pl.abcdatalog.DatalogGui</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.16</version>
+				<configuration>
+					<inceptionYear>2016</inceptionYear>
+					<organizationName>President and Fellows of Harvard College</organizationName>
+					<projectName>AbcDatalog</projectName>
+					<licenseName>bsd_3</licenseName>
+					<roots>
+						<root>src/main/java</root>
+						<root>src/test/java</root>
+          </roots>
+          <outputDirectory>licenses</outputDirectory>
+				</configuration>
+        <executions>
+          <execution>
+            <id>download-licenses</id>
+            <goals>
+              <goal>download-licenses</goal>
+            </goals>
+          </execution>
+        </executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
