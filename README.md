@@ -15,7 +15,7 @@ AbcDatalog is released under a BSD License, a copy of which is included in this
 directory.
 
 AbcDatalog uses third party libraries; a list of them and their associated
-licenses can be found in the [`third-party-licenses`](third-party-licenses/)
+licenses can be found in the [`third-party-licenses/`](third-party-licenses/)
 subdirectory.
 
 # Requirements
