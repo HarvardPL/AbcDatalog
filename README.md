@@ -29,7 +29,11 @@ AbcDatalog can be compiled using the included build script. From this directory,
 running `mvn package` will build the archive
 `target/AbcDatalog-X.Y.Z-jar-with-dependencies.jar` (where `X.Y.Z` is the
 version number). This archive is executable; running it launches the AbcDatalog
-graphical user interface.
+graphical user interface:
+
+```
+java -jar target/AbcDatalog-X.Y.Z-jar-with-dependencies.jar
+```
 
 # People
 
