@@ -30,7 +30,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>edu.harvard.seas.pl.abcdatalog.DatalogGui</mainClass>
+              <mainClass>edu.harvard.seas.pl.abcdatalog.gui.DatalogGui</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
