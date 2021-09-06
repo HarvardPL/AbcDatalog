@@ -1,0 +1,89 @@
+package edu.harvard.seas.pl.abcdatalog.executor;
+
+import java.util.Set;
+
+import edu.harvard.seas.pl.abcdatalog.ast.Clause;
+import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
+import edu.harvard.seas.pl.abcdatalog.ast.PredicateSym;
+import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
+import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ExtensibleBottomUpEvalManager;
+
+/**
+ * A Datalog executor that runs the actual Datalog evaluation concurrently in
+ * separate threads.
+ *
+ */
+public class DatalogParallelExecutor implements DatalogExecutor {
+	/**
+	 * Whether the runner thread has been started. This is guarded by this
+	 * executor's inherent lock.
+	 */
+	private volatile boolean isInitialized = false, isRunning = false;
+	/**
+	 * Whether executor has been initialized.
+	 */
+	/**
+	 * The set of EDB relations that can be dynamically extended.
+	 */
+	private volatile Set<PredicateSym> extensibleEdbPreds;
+	
+	private volatile ExtensibleBottomUpEvalManager eval;
+
+	@Override
+	public synchronized void initialize(Set<Clause> program,
+			Set<PredicateSym> extensibleEdbPreds) throws DatalogValidationException {
+		if (this.isRunning) {
+			throw new IllegalStateException(
+					"Cannot initialize an executor that is already running).");
+		}
+		if (this.isInitialized) {
+			throw new IllegalStateException("Executor already initialized.");
+		}
+		this.eval = new ExtensibleBottomUpEvalManager(extensibleEdbPreds);
+		this.eval.initialize(program);
+		this.extensibleEdbPreds = extensibleEdbPreds;
+		this.isInitialized = true;
+	}
+
+	@Override
+	public synchronized void start() {
+		if (this.isRunning) {
+			throw new IllegalStateException("Executor is already running.");
+		}
+		if (!this.isInitialized) {
+			throw new IllegalStateException(
+					"Executor has not been initialized.");
+		}
+		this.eval.eval();
+		this.isRunning = true;
+	}
+
+	@Override
+	public void shutdown() {
+		this.eval.finishAsynchronousEval();
+	}
+	
+	@Override
+	public void addFactAsynchronously(PositiveAtom edbFact) {
+		if (!this.isInitialized) {
+			throw new IllegalStateException(
+					"Executor must be initialized before adding facts.");
+		}
+		if (!edbFact.isGround()) {
+			throw new IllegalArgumentException("Atom is not ground.");
+		}
+		if (!this.extensibleEdbPreds.contains(edbFact.getPred())) {
+			throw new IllegalArgumentException(
+					"Atom is not part of an extendible EDB relation.");
+		}
+
+		this.eval.addFact(edbFact);
+	}
+
+	@Override
+	public synchronized void registerListener(PredicateSym p,
+			DatalogListener listener) {
+		this.eval.addListener(p, listener);
+	}
+
+}

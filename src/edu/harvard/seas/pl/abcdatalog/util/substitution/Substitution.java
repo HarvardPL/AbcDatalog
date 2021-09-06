@@ -1,0 +1,29 @@
+package edu.harvard.seas.pl.abcdatalog.util.substitution;
+
+import edu.harvard.seas.pl.abcdatalog.ast.Term;
+import edu.harvard.seas.pl.abcdatalog.ast.Variable;
+
+/**
+ * A mapping from variables to terms.
+ *
+ */
+public interface Substitution {
+	/**
+	 * Apply this substitution to a list of terms, creating a new list.
+	 * 
+	 * @param original
+	 *            the original list
+	 * @return the new list
+	 */
+	Term[] apply(Term[] original);
+
+	/**
+	 * Retrieves the mapping of a variable.
+	 * 
+	 * @param x
+	 *            the variable
+	 * @return the term that the variable is bound to, or null if the variable
+	 *         is not in the substitution
+	 */
+	Term get(Variable x);
+}
