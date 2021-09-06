@@ -21,7 +21,7 @@ subdirectory.
 # Requirements
 
 * Java 8+
-* Maven (3.6.3 is known to work)
+* Maven (v3.6.3 is known to work)
 
 # Compilation
 
