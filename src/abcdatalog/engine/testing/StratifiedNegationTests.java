@@ -1,17 +1,3 @@
-/*******************************************************************************
- * This file is part of the AbcDatalog project.
- *
- * Copyright (c) 2016, Harvard University
- * All rights reserved.
- *
- * This program and the accompanying materials are made available under
- * the terms of the BSD License which accompanies this distribution.
- *
- * The development of the AbcDatalog project has been supported by the 
- * National Science Foundation under Grant Nos. 1237235 and 1054172.
- *
- * See README for contributors.
- ******************************************************************************/
 package abcdatalog.engine.testing;
 
 import static org.junit.Assert.assertEquals;
@@ -20,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import abcdatalog.ast.PositiveAtom;
@@ -103,6 +90,7 @@ public abstract class StratifiedNegationTests extends AbstractTests {
 				"unreach(b,a). unreach(c,b). unreach(c,a). unreach(a,a). unreach(b,b). unreach(c,c).");
 	}
 
+	@Ignore
 	@Test
 	public void testRelated() throws DatalogValidationException {
 		testFile("related.dtlg", "check(X,Y)?", "");
@@ -161,7 +149,8 @@ public abstract class StratifiedNegationTests extends AbstractTests {
 				+ "unrelated(carson, odell). unrelated(harley, odell). unrelated(gonzalo, odell)."
 				+ "unrelated(deidra, odell). unrelated(eldon, odell). unrelated(fern, odell).");
 	}
-	
+
+	@Ignore
 	@Test
 	public void testRelated2() throws DatalogValidationException {
 		testFile("related2.dtlg", "check(X,Y)?", "");

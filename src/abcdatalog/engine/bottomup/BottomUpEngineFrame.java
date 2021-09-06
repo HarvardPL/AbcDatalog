@@ -1,17 +1,3 @@
-/*******************************************************************************
- * This file is part of the AbcDatalog project.
- *
- * Copyright (c) 2016, Harvard University
- * All rights reserved.
- *
- * This program and the accompanying materials are made available under
- * the terms of the BSD License which accompanies this distribution.
- *
- * The development of the AbcDatalog project has been supported by the 
- * National Science Foundation under Grant Nos. 1237235 and 1054172.
- *
- * See README for contributors.
- ******************************************************************************/
 package abcdatalog.engine.bottomup;
 
 import java.util.HashSet;
@@ -27,11 +13,11 @@ import abcdatalog.util.datastructures.IndexableFactCollection;
  * A framework for a bottom-up Datalog engine.
  *
  */
-public class BottomUpEngineFrame implements DatalogEngine {
+public class BottomUpEngineFrame<E extends EvalManager> implements DatalogEngine {
 	/**
 	 * The evaluation manager for this engine.
 	 */
-	private final EvalManager manager;
+	protected final E manager;
 	/**
 	 * The set of facts that can be derived from the current program.
 	 */
@@ -47,7 +33,7 @@ public class BottomUpEngineFrame implements DatalogEngine {
 	 * @param manager
 	 *            the manager
 	 */
-	public BottomUpEngineFrame(EvalManager manager) {
+	public BottomUpEngineFrame(E manager) {
 		this.manager = manager;
 	}
 

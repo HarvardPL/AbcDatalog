@@ -1,17 +1,3 @@
-/*******************************************************************************
- * This file is part of the AbcDatalog project.
- *
- * Copyright (c) 2016, Harvard University
- * All rights reserved.
- *
- * This program and the accompanying materials are made available under
- * the terms of the BSD License which accompanies this distribution.
- *
- * The development of the AbcDatalog project has been supported by the 
- * National Science Foundation under Grant Nos. 1237235 and 1054172.
- *
- * See README for contributors.
- ******************************************************************************/
 package abcdatalog.engine.bottomup;
 
 import abcdatalog.ast.PositiveAtom;
@@ -19,6 +5,7 @@ import abcdatalog.ast.PredicateSym;
 import abcdatalog.ast.Premise;
 import abcdatalog.ast.Term;
 import abcdatalog.ast.visitors.PremiseVisitor;
+import abcdatalog.util.substitution.Substitution;
 
 /**
  * An annotated atom. In certain evaluation algorithms (such as semi-naive
@@ -79,6 +66,11 @@ public class AnnotatedAtom implements Premise {
 			assert false;
 		}
 		return atom + "<" + a + ">";
+	}
+
+	@Override
+	public Premise applySubst(Substitution subst) {
+		return new AnnotatedAtom(atom.applySubst(subst), anno);
 	}
 
 }

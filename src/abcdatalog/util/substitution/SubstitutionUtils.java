@@ -1,24 +1,13 @@
-/*******************************************************************************
- * This file is part of the AbcDatalog project.
- *
- * Copyright (c) 2016, Harvard University
- * All rights reserved.
- *
- * This program and the accompanying materials are made available under
- * the terms of the BSD License which accompanies this distribution.
- *
- * The development of the AbcDatalog project has been supported by the 
- * National Science Foundation under Grant Nos. 1237235 and 1054172.
- *
- * See README for contributors.
- ******************************************************************************/
 package abcdatalog.util.substitution;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import abcdatalog.ast.Clause;
+import abcdatalog.ast.Head;
 import abcdatalog.ast.PositiveAtom;
+import abcdatalog.ast.Premise;
 
 public final class SubstitutionUtils {
 
@@ -53,6 +42,15 @@ public final class SubstitutionUtils {
 		List<PositiveAtom> ret = new ArrayList<>();
 		applyToPositiveAtoms(subst, atoms, ret);
 		return ret;
+	}
+
+	public static Clause applyToClause(Substitution subst, Clause cl) {
+		Head newHead = cl.getHead().applySubst(subst);
+		List<Premise> newBody = new ArrayList<>();
+		for (Premise p : cl.getBody()) {
+			newBody.add(p.applySubst(subst));
+		}
+		return new Clause(newHead, newBody);
 	}
 
 }

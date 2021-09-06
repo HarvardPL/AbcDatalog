@@ -1,43 +1,34 @@
-/*******************************************************************************
- * This file is part of the AbcDatalog project.
- *
- * Copyright (c) 2016, Harvard University
- * All rights reserved.
- *
- * This program and the accompanying materials are made available under
- * the terms of the BSD License which accompanies this distribution.
- *
- * The development of the AbcDatalog project has been supported by the 
- * National Science Foundation under Grant Nos. 1237235 and 1054172.
- *
- * See README for contributors.
- ******************************************************************************/
 package abcdatalog.engine.bottomup.sequential;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import abcdatalog.ast.BinaryDisunifier;
+import abcdatalog.ast.BinaryUnifier;
 import abcdatalog.ast.Clause;
+import abcdatalog.ast.NegatedAtom;
 import abcdatalog.ast.PositiveAtom;
 import abcdatalog.ast.PredicateSym;
 import abcdatalog.ast.Premise;
 import abcdatalog.ast.validation.DatalogValidationException;
 import abcdatalog.ast.validation.DatalogValidator;
+import abcdatalog.ast.validation.DatalogValidator.ValidClause;
 import abcdatalog.ast.validation.StratifiedNegationValidator;
 import abcdatalog.ast.validation.StratifiedProgram;
-import abcdatalog.ast.validation.DatalogValidator.ValidClause;
 import abcdatalog.ast.validation.UnstratifiedProgram;
 import abcdatalog.ast.visitors.HeadVisitor;
 import abcdatalog.ast.visitors.PremiseVisitor;
 import abcdatalog.ast.visitors.PremiseVisitorBuilder;
 import abcdatalog.engine.bottomup.AnnotatedAtom;
 import abcdatalog.engine.bottomup.ClauseEvaluator;
-import abcdatalog.engine.bottomup.EvalManager;
+import abcdatalog.engine.bottomup.EvalManagerWithProvenance;
 import abcdatalog.engine.bottomup.SemiNaiveClauseAnnotator;
 import abcdatalog.engine.bottomup.SemiNaiveClauseAnnotator.SemiNaiveClause;
 import abcdatalog.util.Utilities;
@@ -46,11 +37,18 @@ import abcdatalog.util.datastructures.FactIndexer;
 import abcdatalog.util.datastructures.FactIndexerFactory;
 import abcdatalog.util.datastructures.IndexableFactCollection;
 import abcdatalog.util.substitution.ClauseSubstitution;
+import abcdatalog.util.substitution.SubstitutionUtils;
 
-public class SemiNaiveEvalManager implements EvalManager {
+public class SemiNaiveEvalManager implements EvalManagerWithProvenance {
 	private final ConcurrentFactIndexer<Set<PositiveAtom>> allFacts = FactIndexerFactory
 			.createConcurrentSetFactIndexer();
 	private final List<StratumEvaluator> stratumEvals = new ArrayList<>();
+	private final boolean collectProv;
+	private final ConcurrentHashMap<PositiveAtom, Clause> justifications = new ConcurrentHashMap<>();
+	
+	public SemiNaiveEvalManager(boolean collectProv) {
+		this.collectProv = collectProv;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -108,6 +106,9 @@ public class SemiNaiveEvalManager implements EvalManager {
 			} else {
 				initialIdbFacts[predToStratumMap.get(fact.getPred())].add(fact);
 			}
+			if (collectProv) {
+				justifications.put(fact, new Clause(fact, Collections.emptyList()));
+			}
 		}
 
 		for (int i = 0; i < nstrata; ++i) {
@@ -121,6 +122,46 @@ public class SemiNaiveEvalManager implements EvalManager {
 			se.eval();
 		}
 		return allFacts;
+	}
+	
+	@Override
+	public Clause getJustification(PositiveAtom fact) {
+		return justifications.get(fact);
+	}
+	
+	public static Clause stripSemiNaiveClause(SemiNaiveClause cl) {
+		List<Premise> newBody = new ArrayList<>();
+		for (Premise p : cl.getBody()) {
+			newBody.add(p.accept(new PremiseVisitor<Void, Premise>() {
+
+				@Override
+				public Premise visit(PositiveAtom atom, Void state) {
+					return atom;
+				}
+
+				@Override
+				public Premise visit(AnnotatedAtom atom, Void state) {
+					return atom.asUnannotatedAtom();
+				}
+
+				@Override
+				public Premise visit(BinaryUnifier u, Void state) {
+					return u;
+				}
+
+				@Override
+				public Premise visit(BinaryDisunifier u, Void state) {
+					return u;
+				}
+
+				@Override
+				public Premise visit(NegatedAtom atom, Void state) {
+					return atom;
+				}
+				
+			}, null));
+		}
+		return new Clause(cl.getHead(), newBody);
 	}
 
 	private class StratumEvaluator {
@@ -142,7 +183,8 @@ public class SemiNaiveEvalManager implements EvalManager {
 				for (Map.Entry<PredicateSym, Set<SemiNaiveClause>> entry : clauseMap.entrySet()) {
 					Set<ClauseEvaluator> s = new HashSet<>();
 					for (SemiNaiveClause cl : entry.getValue()) {
-						s.add(new ClauseEvaluator(cl, this::addFact, this::getFacts));
+						Clause stripped = stripSemiNaiveClause(cl);
+						s.add(new ClauseEvaluator(cl, (fact, subst) -> addFact(fact, subst, stripped), this::getFacts));
 					}
 					evalMap.put(entry.getKey(), s);
 				}
@@ -152,7 +194,7 @@ public class SemiNaiveEvalManager implements EvalManager {
 			laterRoundEvals = translate.apply(laterRoundRules);
 			this.initialIdbFacts = initialIdbFacts;
 		}
-
+		
 		public void eval() {
 			deltaNew.addAll(this.initialIdbFacts);
 			evalOneRound(allFacts, firstRoundEvals);
@@ -184,11 +226,14 @@ public class SemiNaiveEvalManager implements EvalManager {
 			return true;
 		}
 
-		private boolean addFact(PositiveAtom fact, ClauseSubstitution subst) {
+		private boolean addFact(PositiveAtom fact, ClauseSubstitution subst, Clause stripped) {
 			fact = fact.applySubst(subst);
 			Set<PositiveAtom> set = allFacts.indexInto(fact);
 			if (!set.contains(fact)) {
 				deltaNew.add(fact);
+				if (collectProv) {
+					justifications.put(fact, SubstitutionUtils.applyToClause(subst, stripped));
+				}
 				return true;
 			}
 			return false;

@@ -1,22 +1,9 @@
-/*******************************************************************************
- * This file is part of the AbcDatalog project.
- *
- * Copyright (c) 2016, Harvard University
- * All rights reserved.
- *
- * This program and the accompanying materials are made available under
- * the terms of the BSD License which accompanies this distribution.
- *
- * The development of the AbcDatalog project has been supported by the 
- * National Science Foundation under Grant Nos. 1237235 and 1054172.
- *
- * See README for contributors.
- ******************************************************************************/
 package abcdatalog.ast;
 
 import java.util.Arrays;
 
 import abcdatalog.ast.visitors.PremiseVisitor;
+import abcdatalog.util.substitution.Substitution;
 
 /**
  * This premise explicitly unifies two terms and is visually represented as the
@@ -52,6 +39,11 @@ public class BinaryUnifier implements Premise {
 	@Override
 	public String toString() {
 		return this.left + " = " + this.right;
+	}
+
+	@Override
+	public Premise applySubst(Substitution subst) {
+		return new BinaryUnifier(left.applySubst(subst), right.applySubst(subst));
 	}
 
 }
