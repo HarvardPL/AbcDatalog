@@ -25,11 +25,12 @@ subdirectory.
 
 # Compilation
 
-AbcDatalog can be compiled using the included build script. From this directory,
-running `mvn package` will build the archive
+AbcDatalog can be compiled using the included build script.
+
+From this directory, run `mvn package` to build the archive
 `target/AbcDatalog-X.Y.Z-jar-with-dependencies.jar` (where `X.Y.Z` is the
-version number). This archive is executable; running it launches the AbcDatalog
-graphical user interface:
+version number). This archive is executable; launch the AbcDatalog graphical
+user interface with the command:
 
 ```
 java -jar target/AbcDatalog-X.Y.Z-jar-with-dependencies.jar
