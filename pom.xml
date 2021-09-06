@@ -60,16 +60,7 @@
 						<root>src/main/java</root>
 						<root>src/test/java</root>
           </roots>
-          <outputDirectory>licenses</outputDirectory>
-				</configuration>
-        <executions>
-          <execution>
-            <id>download-licenses</id>
-            <goals>
-              <goal>download-licenses</goal>
-            </goals>
-          </execution>
-        </executions>
+        </configuration>
 			</plugin>
 		</plugins>
 	</build>
