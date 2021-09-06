@@ -1,8 +1,6 @@
-lib/
 target/
 
 # Ignore Eclipse metadata.
-#.classpath
-#.project
-#.settings/
-
+.classpath
+.project
+.settings/
