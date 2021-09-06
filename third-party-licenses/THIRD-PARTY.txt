@@ -1,0 +1,4 @@
+
+Lists of 2 third-party dependencies.
+     (Eclipse Public License 1.0) JUnit (junit:junit:4.13.2 - http://junit.org)
+     (New BSD License) Hamcrest Core (org.hamcrest:hamcrest-core:1.3 - https://github.com/hamcrest/JavaHamcrest/hamcrest-core)
