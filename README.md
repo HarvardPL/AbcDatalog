@@ -23,42 +23,29 @@ subdirectory.
 * Java 8+
 * Maven (v3.6.3 is known to work); necessary only for compilation
 
-# Usage
-
-## Pre-built JAR
+# Compilation
 
 A pre-built JAR can be found on the
 [Releases](https://github.com/HarvardPL/AbcDatalog/releases) section of GitHub.
 
-## Compilation
+If you desire, you can compile the source code into a JAR using Maven. From
+this directory, run `mvn package` to build the archive
+`target/AbcDatalog-[X.Y.Z]-jar-with-dependencies.jar` (where `[X.Y.Z]` is the
+version number).
 
-AbcDatalog can be compiled using Maven. From this directory, run `mvn package`
-to build the archive `target/AbcDatalog-[X.Y.Z]-jar-with-dependencies.jar`
-(where `[X.Y.Z]` is the version number).
-
-## Launching the GUI
-
-The AbcDatalog JAR is executable; launch the AbcDatalog graphical user
-interface with the command:
-
-```
-java -jar [AbcDatalog.jar]
-```
-
-where `[AbcDatalog.jar]` is the name of the JAR on your system.
-
-## Programming with the API
+# Usage
 
 Please see the [AbcDatalog website](https://abcdatalog.seas.harvard.edu/) for
-information on how to interface with AbcDatalog from your Java program.
+information on how to use the AbcDatalog graphical user interface and how to
+interface with AbcDatalog from Java programs.
 
 # People
 
 The primary contributors to AbcDatalog are:
 
-	* Aaron Bembenek
-	* Stephen Chong
-	* Marco Gaboardi
+* Aaron Bembenek
+* Stephen Chong
+* Marco Gaboardi
 
 Please email bembenek@g.harvard.edu with questions, comments, and bug reports.
 
