@@ -78,6 +78,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
 import edu.harvard.seas.pl.abcdatalog.engine.DatalogEngine;
@@ -106,6 +107,7 @@ public class DatalogGui extends JFrame {
 	 */
 	public DatalogGui() {
 		super("Datalog Editor and Interpreter");
+		FlatLightLaf.setup();
 		this.setSize(400, 400);
 		// Make sure to warn the user when attempting to exit with unsaved work.
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -152,7 +154,7 @@ public class DatalogGui extends JFrame {
 		editorPanel.add(Box.createRigidArea(new Dimension(0, 10)), BorderLayout.SOUTH);
 
 		// The user has to load the code in the text area into the interpreter.
-		Box loadPane = Box.createVerticalBox(); 
+		Box loadPane = Box.createVerticalBox();
 		JButton load = new JButton("Load");
 		load.addActionListener(new ActionListener() {
 			@Override
@@ -171,7 +173,7 @@ public class DatalogGui extends JFrame {
 		StyleConstants.setAlignment(defaultStyle, StyleConstants.ALIGN_CENTER);
 		this.warning = new JTextPane(document);
 		this.warning.setEditable(false);
-		this.warning.setBackground(this.getBackground());
+		this.warning.setOpaque(false);
 		loadPane.add(this.warning);
 
 		// The user enters a query and requests the interpreter to run it.
@@ -196,7 +198,7 @@ public class DatalogGui extends JFrame {
 		queryPane.add(run);
 		loadPane.add(queryPane);
 		loadPane.add(Box.createRigidArea(new Dimension(0, 20)));
-		
+
 		// The results are printed in a non-editable text area.
 		JPanel resultsLabelPanel = new JPanel(new BorderLayout());
 		JLabel resultsLabel = new JLabel("Results: ");
@@ -209,11 +211,11 @@ public class DatalogGui extends JFrame {
 		JScrollPane resultsScroll = new JScrollPane(this.results,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
+
 		JPanel evaluatorPanel = new JPanel(new BorderLayout());
 		evaluatorPanel.add(loadPane, BorderLayout.NORTH);
 		evaluatorPanel.add(resultsScroll, BorderLayout.CENTER);
-		
+
 		JSplitPane mainPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editorPanel, evaluatorPanel);
 		mainPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		mainPane.setOneTouchExpandable(true);
@@ -350,7 +352,7 @@ public class DatalogGui extends JFrame {
 	/**
 	 * Is called when the user tries to open a new file or exit the GUI without
 	 * saving her work.
-	 * 
+	 *
 	 * @return whether to continue without saving
 	 */
 	private boolean continueWithoutSaving() {
@@ -375,7 +377,7 @@ public class DatalogGui extends JFrame {
 
 	/**
 	 * Runs the GUI.
-	 * 
+	 *
 	 * @param args
 	 *            the command-line arguments (not used)
 	 */
