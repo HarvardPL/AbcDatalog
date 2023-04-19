@@ -38,8 +38,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -68,6 +70,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
@@ -101,6 +104,7 @@ public class DatalogGui extends JFrame {
 	private volatile boolean programLoaded = false;
 	private final JFileChooser fileChooser;
 	private volatile DatalogEngine engine;
+	private final int defaultFontSize = 12;
 
 	/**
 	 * Constructs the GUI.
@@ -128,6 +132,7 @@ public class DatalogGui extends JFrame {
 		editorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		editorPanel.add(editorLabel, BorderLayout.NORTH);
 		this.program = new JTextArea(20, 60);
+		this.program.setFont(new Font(Font.DIALOG, Font.PLAIN, defaultFontSize));
 		this.program.setLineWrap(true);
 		this.program.setWrapStyleWord(true);
 		this.program.getDocument().addDocumentListener(new DocumentListener() {
@@ -221,35 +226,73 @@ public class DatalogGui extends JFrame {
 		mainPane.setOneTouchExpandable(true);
 
 		// Set up a basic menu bar.
-		JMenuItem open = new JMenuItem("Open");
-		open.addActionListener(new ActionListener() {
+		JMenuItem openMenuItem = new JMenuItem("Open");
+		openMenuItem.setMnemonic('o');
+		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+		openMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				open();
 			}
 		});
-		JMenuItem save = new JMenuItem("Save");
-		save.addActionListener(new ActionListener() {
+		JMenuItem saveMenuItem = new JMenuItem("Save");
+		saveMenuItem.setMnemonic('s');
+		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+		saveMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				save();
 			}
 		});
-		JMenuItem exit = new JMenuItem("Exit");
-		exit.addActionListener(new ActionListener() {
+		JMenuItem exitMenuItem = new JMenuItem("Exit");
+		exitMenuItem.setMnemonic('e');
+		exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
+		exitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				exit();
 			}
 		});
-		JMenu menu = new JMenu("File");
-		menu.add(open);
-		menu.add(save);
-		menu.addSeparator();
-		menu.add(exit);
-		JMenuBar bar = new JMenuBar();
-		bar.add(menu);
-		this.setJMenuBar(bar);
+		JMenuItem zoomInMenuItem = new JMenuItem("Zoom in");
+		zoomInMenuItem.setMnemonic('i');
+		zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK));
+		zoomInMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoomText(2);
+			}
+		});
+		JMenuItem zoomOutMenuItem = new JMenuItem("Zoom out");
+		zoomOutMenuItem.setMnemonic('o');
+		zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK));
+		zoomOutMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoomText(-2);
+			}
+		});
+		JMenuItem restoreZoomMenuItem = new JMenuItem("Default zoom");
+		restoreZoomMenuItem.setMnemonic('d');
+		restoreZoomMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK));
+		restoreZoomMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoomText(0);
+			}
+		});
+		JMenu fileMenu = new JMenu("File");
+		JMenu viewMenu = new JMenu("View");
+		fileMenu.add(openMenuItem);
+		fileMenu.add(saveMenuItem);
+		fileMenu.addSeparator();
+		fileMenu.add(exitMenuItem);
+		viewMenu.add(zoomInMenuItem);
+		viewMenu.add(zoomOutMenuItem);
+		viewMenu.add(restoreZoomMenuItem);
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(fileMenu);
+		menuBar.add(viewMenu);
+		this.setJMenuBar(menuBar);
 
 		this.add(mainPane);
 		this.pack();
@@ -373,6 +416,19 @@ public class DatalogGui extends JFrame {
 			this.warning
 					.setText("WARNING: Program has changed since last load.");
 		}
+	}
+
+	/**
+	 * Is called when the user zooms in, out, or restores default zoom.
+	 *
+	 * @param increment
+	 * 				   the increment to add to the old font size
+	 */
+	private void zoomText(int increment) {
+		Font oldFont = program.getFont();
+		int newSize = increment == 0 ? defaultFontSize : oldFont.getSize() + increment;
+		Font newFont = new Font(oldFont.getFontName(), oldFont.getStyle(), newSize);
+		program.setFont(newFont);
 	}
 
 	/**
