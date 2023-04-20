@@ -80,6 +80,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import javax.swing.undo.UndoManager;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
@@ -105,6 +106,7 @@ public class DatalogGui extends JFrame {
 	private final JFileChooser fileChooser;
 	private volatile DatalogEngine engine;
 	private final int defaultFontSize = 12;
+	private final UndoManager undoManager = new UndoManager();
 
 	/**
 	 * Constructs the GUI.
@@ -132,9 +134,10 @@ public class DatalogGui extends JFrame {
 		editorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		editorPanel.add(editorLabel, BorderLayout.NORTH);
 		this.program = new JTextArea(20, 60);
-		this.program.setFont(new Font(Font.DIALOG, Font.PLAIN, defaultFontSize));
+		this.program.setFont(new Font(Font.DIALOG, Font.PLAIN, this.defaultFontSize));
 		this.program.setLineWrap(true);
 		this.program.setWrapStyleWord(true);
+		this.program.getDocument().addUndoableEditListener(this.undoManager);
 		this.program.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -226,71 +229,113 @@ public class DatalogGui extends JFrame {
 		mainPane.setOneTouchExpandable(true);
 
 		// Set up a basic menu bar.
-		JMenuItem openMenuItem = new JMenuItem("Open");
-		openMenuItem.setMnemonic('o');
-		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
-		openMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				open();
-			}
-		});
-		JMenuItem saveMenuItem = new JMenuItem("Save");
-		saveMenuItem.setMnemonic('s');
-		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
-		saveMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				save();
-			}
-		});
-		JMenuItem exitMenuItem = new JMenuItem("Exit");
-		exitMenuItem.setMnemonic('e');
-		exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
-		exitMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exit();
-			}
-		});
-		JMenuItem zoomInMenuItem = new JMenuItem("Zoom in");
-		zoomInMenuItem.setMnemonic('i');
-		zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK));
-		zoomInMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				zoomText(2);
-			}
-		});
-		JMenuItem zoomOutMenuItem = new JMenuItem("Zoom out");
-		zoomOutMenuItem.setMnemonic('o');
-		zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK));
-		zoomOutMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				zoomText(-2);
-			}
-		});
-		JMenuItem restoreZoomMenuItem = new JMenuItem("Default zoom");
-		restoreZoomMenuItem.setMnemonic('d');
-		restoreZoomMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK));
-		restoreZoomMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				zoomText(0);
-			}
-		});
+		JMenuItem openMenuItem = createMenuItem(
+				"Open",
+				'o',
+				KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK),
+				e -> open()
+		);
+		JMenuItem saveMenuItem = createMenuItem(
+				"Save",
+				's',
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK),
+				e -> save()
+		);
+		JMenuItem exitMenuItem = createMenuItem(
+				"Exit",
+				'e',
+				KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK),
+				e -> exit()
+		);
+		JMenuItem undoMenuItem = createMenuItem(
+				"Undo",
+				'u',
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK),
+				e -> {
+					if (undoManager.canUndo()) undoManager.undo();
+				}
+		);
+		JMenuItem redoMenuItem = createMenuItem(
+				"Redo",
+				'r',
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK),
+				e -> {
+					if (undoManager.canRedo()) undoManager.redo();
+				}
+		);
+		JMenuItem cutMenuItem = createMenuItem(
+				"Cut",
+				'c',
+				KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK),
+				e -> program.cut()
+		);
+		JMenuItem copyMenuItem = createMenuItem(
+				"Copy",
+				'o',
+				KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK),
+				e -> program.copy()
+		);
+		JMenuItem pasteMenuItem = createMenuItem(
+				"Paste",
+				'p',
+				KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK),
+				e -> program.paste()
+		);
+		JMenuItem selectAllMenuItem = createMenuItem(
+				"Select all",
+				's',
+				KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK),
+				e -> program.selectAll()
+		);
+		JMenuItem clearAllMenuItem = createMenuItem(
+				"Clear all",
+				'a',
+				KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+				e -> program.setText("")
+		);
+		JMenuItem zoomInMenuItem = createMenuItem(
+				"Zoom in",
+				'i',
+				KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK),
+				e -> zoomText(2)
+		);
+		JMenuItem zoomOutMenuItem = createMenuItem(
+				"Zoom out",
+				'o',
+				KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK),
+				e -> zoomText(-2)
+		);
+		JMenuItem restoreZoomMenuItem = createMenuItem(
+				"Default zoom",
+				'd',
+				KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK),
+				e -> zoomText(0)
+		);
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic('f');
+		JMenu editMenu = new JMenu("Edit");
+		editMenu.setMnemonic('e');
 		JMenu viewMenu = new JMenu("View");
+		viewMenu.setMnemonic('v');
 		fileMenu.add(openMenuItem);
 		fileMenu.add(saveMenuItem);
 		fileMenu.addSeparator();
 		fileMenu.add(exitMenuItem);
+		editMenu.add(undoMenuItem);
+		editMenu.add(redoMenuItem);
+		editMenu.addSeparator();
+		editMenu.add(cutMenuItem);
+		editMenu.add(copyMenuItem);
+		editMenu.add(pasteMenuItem);
+		editMenu.addSeparator();
+		editMenu.add(selectAllMenuItem);
+		editMenu.add(clearAllMenuItem);
 		viewMenu.add(zoomInMenuItem);
 		viewMenu.add(zoomOutMenuItem);
 		viewMenu.add(restoreZoomMenuItem);
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
 		menuBar.add(viewMenu);
 		this.setJMenuBar(menuBar);
 
@@ -429,6 +474,28 @@ public class DatalogGui extends JFrame {
 		int newSize = increment == 0 ? defaultFontSize : oldFont.getSize() + increment;
 		Font newFont = new Font(oldFont.getFontName(), oldFont.getStyle(), newSize);
 		program.setFont(newFont);
+	}
+
+	/**
+	 * Creates and returns a JMenuItem
+	 *
+	 * @param text
+	 * 			  text to be displayed on the menu item
+	 * @param mnemonic
+	 * 			  mnemonic for quick access
+	 * @param accelerator
+	 * 			  keyboard accelerator to trigger the menu item
+	 * @param listener
+	 *            action listener for the menu item
+	 * @return a JMenuItem
+	 *
+	 */
+	private JMenuItem createMenuItem(String text, char mnemonic, KeyStroke accelerator, ActionListener listener) {
+		JMenuItem menuItem = new JMenuItem(text);
+		menuItem.setMnemonic(mnemonic);
+		menuItem.setAccelerator(accelerator);
+		menuItem.addActionListener(listener);
+		return menuItem;
 	}
 
 	/**
