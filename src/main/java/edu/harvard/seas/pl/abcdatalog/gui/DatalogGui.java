@@ -97,7 +97,8 @@ import edu.harvard.seas.pl.abcdatalog.parser.DatalogTokenizer;
  */
 @SuppressWarnings("serial")
 public class DatalogGui extends JFrame {
-	private final JTextArea program, results;
+	private final TextEditor program;
+	private final JTextArea results;
 	private final JTextField query;
 	private final Action queryAction;
 	private final JTextPane warning;
@@ -133,7 +134,7 @@ public class DatalogGui extends JFrame {
 		JLabel editorLabel = new JLabel("Program: ");
 		editorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		editorPanel.add(editorLabel, BorderLayout.NORTH);
-		this.program = new JTextArea(20, 60);
+		this.program = new TextEditor(20, 60);
 		this.program.setFont(new Font(Font.DIALOG, Font.PLAIN, this.defaultFontSize));
 		this.program.setLineWrap(true);
 		this.program.setWrapStyleWord(true);
@@ -293,6 +294,36 @@ public class DatalogGui extends JFrame {
 				KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
 				e -> program.setText("")
 		);
+		JMenuItem deleteLineMenuItem = createMenuItem(
+				"Delete line",
+				'd',
+				KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK),
+				e -> program.deleteCurrentLine()
+		);
+		JMenuItem duplicateLineMenuItem = createMenuItem(
+				"Duplicate line",
+				'l',
+				KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+				e -> program.duplicateCurrentLine()
+		);
+		JMenuItem moveLineUpMenuItem = createMenuItem(
+				"Move line up",
+				'm',
+				KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+				e -> program.moveLine(-1)
+		);
+		JMenuItem moveLineDownMenuItem = createMenuItem(
+				"Move line down",
+				'e',
+				KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+				e -> program.moveLine(1)
+		);
+		JMenuItem toggleLineComment = createMenuItem(
+				"Toggle comment",
+				't',
+				KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, KeyEvent.CTRL_DOWN_MASK),
+				e -> program.toggleComment()
+		);
 		JMenuItem zoomInMenuItem = createMenuItem(
 				"Zoom in",
 				'i',
@@ -330,6 +361,12 @@ public class DatalogGui extends JFrame {
 		editMenu.addSeparator();
 		editMenu.add(selectAllMenuItem);
 		editMenu.add(clearAllMenuItem);
+		editMenu.addSeparator();
+		editMenu.add(deleteLineMenuItem);
+		editMenu.add(duplicateLineMenuItem);
+		editMenu.add(moveLineUpMenuItem);
+		editMenu.add(moveLineDownMenuItem);
+		editMenu.add(toggleLineComment);
 		viewMenu.add(zoomInMenuItem);
 		viewMenu.add(zoomOutMenuItem);
 		viewMenu.add(restoreZoomMenuItem);
