@@ -411,8 +411,11 @@ public class DatalogGui extends JFrame {
 	 * Is called when the user tries to make a query.
 	 */
 	private void query() {
-		DatalogTokenizer t = new DatalogTokenizer(new StringReader(
-				this.query.getText()));
+		String text = this.query.getText();
+		if (!text.endsWith("?")) {
+			text += "?";
+		}
+		DatalogTokenizer t = new DatalogTokenizer(new StringReader(text));
 		try {
 			Set<PositiveAtom> facts = this.engine.query(DatalogParser.parseQuery(t));
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();

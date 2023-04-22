@@ -5,6 +5,7 @@ import javax.swing.text.BadLocationException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+@SuppressWarnings("serial")
 public class TextEditor extends JTextArea {
     TextEditor(int rows, int columns) {
         this.setRows(rows);
