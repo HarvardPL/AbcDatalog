@@ -47,7 +47,7 @@ The primary contributors to AbcDatalog are:
 * Stephen Chong
 * Marco Gaboardi
 
-Please email bembenek@g.harvard.edu with questions, comments, and bug reports.
+Question, comment, bug report? Please raise a [GitHub issue](https://github.com/HarvardPL/AbcDatalog/issues).
 
 Thanks to João Gonçalves for helping transition AbcDatalog to GitHub!
 
