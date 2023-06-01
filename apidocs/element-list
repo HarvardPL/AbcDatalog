@@ -1,0 +1,17 @@
+edu.harvard.seas.pl.abcdatalog
+edu.harvard.seas.pl.abcdatalog.ast
+edu.harvard.seas.pl.abcdatalog.ast.validation
+edu.harvard.seas.pl.abcdatalog.ast.visitors
+edu.harvard.seas.pl.abcdatalog.engine
+edu.harvard.seas.pl.abcdatalog.engine.bottomup
+edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent
+edu.harvard.seas.pl.abcdatalog.engine.bottomup.sequential
+edu.harvard.seas.pl.abcdatalog.engine.testing
+edu.harvard.seas.pl.abcdatalog.engine.topdown
+edu.harvard.seas.pl.abcdatalog.executor
+edu.harvard.seas.pl.abcdatalog.gui
+edu.harvard.seas.pl.abcdatalog.parser
+edu.harvard.seas.pl.abcdatalog.util
+edu.harvard.seas.pl.abcdatalog.util.datastructures
+edu.harvard.seas.pl.abcdatalog.util.graph
+edu.harvard.seas.pl.abcdatalog.util.substitution
