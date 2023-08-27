@@ -410,19 +410,39 @@ public class DatalogGui extends JFrame {
 	}
 
 	/**
+	 * Parse some text as a Datalog query, i.e., a positive atom, optionally followed by "?".
+	 *
+	 * @param text the text to parse as a query
+	 * @return the parsed query
+	 * @throws DatalogParseException if the text does not have the form of a query
+	 */
+	private PositiveAtom parseQuery(String text) throws DatalogParseException {
+		DatalogTokenizer t = new DatalogTokenizer(new StringReader(text));
+		PositiveAtom query = DatalogParser.parsePositiveAtom(t);
+		if (t.hasNext() && t.peek().equals("?")) {
+			t.consume("?");
+		}
+		if (t.hasNext()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("unexpected tokens after query: ");
+			while (t.hasNext()) {
+				sb.append(t.next());
+			}
+			throw new DatalogParseException(sb.toString());
+		}
+		return query;
+	}
+
+	/**
 	 * Is called when the user tries to make a query.
 	 */
 	private void query() {
 		String text = this.query.getText();
-		if (!text.endsWith("?")) {
-			text += "?";
-		}
-		DatalogTokenizer t = new DatalogTokenizer(new StringReader(text));
 		try {
-			Set<PositiveAtom> facts = this.engine.query(DatalogParser.parseQuery(t));
+			Set<PositiveAtom> facts = this.engine.query(parseQuery(text));
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream ps = new PrintStream(buffer);
-			for (String fact : facts.stream().map(f -> f.toString()).sorted().collect(Collectors.toList())) {
+			for (String fact : facts.stream().map(PositiveAtom::toString).sorted().collect(Collectors.toList())) {
 				ps.println(fact);
 			}
 			this.results.setText(buffer.toString());
