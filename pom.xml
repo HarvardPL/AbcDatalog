@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.harvard.seas.pl</groupId>
 	<artifactId>AbcDatalog</artifactId>
-	<version>0.6.0</version>
+	<version>0.7.0</version>
 	<name>AbcDatalog</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
