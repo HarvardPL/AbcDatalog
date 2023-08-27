@@ -51,6 +51,9 @@ public class TextEditor extends JTextArea {
                     autocompleteParentheses();
                     e.consume();
                 }
+                else if (c == ')') {
+                    overtypeClosingParenthesis(e);
+                }
             }
         });
     }
@@ -73,6 +76,25 @@ public class TextEditor extends JTextArea {
             int pos = this.getCaretPosition();
             this.insert("()", pos);
             this.setCaretPosition(pos + 1);
+        }
+    }
+
+    /**
+     * Is called when ) key is typed. If no text is currently
+     * selected and the next character is already an ), does not
+     * insert an ) and just moves the cursor forward.
+     * Otherwise, handles the keypress as normal.
+     */
+    private void overtypeClosingParenthesis(KeyEvent e) {
+        int pos = this.getCaretPosition();
+        try {
+            String nextCharacter = this.getText(pos, 1);
+            if (this.getSelectedText() == null && nextCharacter.equals(")")) {
+                this.setCaretPosition(pos + 1);
+                e.consume();
+            }
+        } catch (BadLocationException ex) {
+            ex.printStackTrace();
         }
     }
 
