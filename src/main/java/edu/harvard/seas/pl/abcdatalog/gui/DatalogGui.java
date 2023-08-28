@@ -217,6 +217,8 @@ public class DatalogGui extends JFrame {
 		this.results = new JTextArea(10, 60);
 		this.results.setEditable(false);
 		this.results.setText("No program loaded.");
+		this.results.setLineWrap(true);
+		this.results.setWrapStyleWord(true);
 		JScrollPane resultsScroll = new JScrollPane(this.results,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
