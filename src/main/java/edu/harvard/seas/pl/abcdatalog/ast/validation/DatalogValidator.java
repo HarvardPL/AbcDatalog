@@ -253,7 +253,7 @@ public class DatalogValidator {
 
 	}
 	
-	private final static class True {
+	public final static class True {
 
 		private True() {
 			// Cannot be instantiated.

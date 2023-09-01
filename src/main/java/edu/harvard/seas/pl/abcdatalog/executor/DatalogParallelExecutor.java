@@ -33,12 +33,14 @@ package edu.harvard.seas.pl.abcdatalog.executor;
  * #L%
  */
 
+import java.util.HashSet;
 import java.util.Set;
 
 import edu.harvard.seas.pl.abcdatalog.ast.Clause;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.PredicateSym;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
+import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidator;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ExtensibleBottomUpEvalManager;
 
 /**
@@ -65,6 +67,8 @@ public class DatalogParallelExecutor implements DatalogExecutor {
 	@Override
 	public synchronized void initialize(Set<Clause> program,
 			Set<PredicateSym> extensibleEdbPreds) throws DatalogValidationException {
+		extensibleEdbPreds = new HashSet<>(extensibleEdbPreds);
+		extensibleEdbPreds.add(DatalogValidator.True.getTrueAtom().getPred());
 		if (this.isRunning) {
 			throw new IllegalStateException(
 					"Cannot initialize an executor that is already running).");

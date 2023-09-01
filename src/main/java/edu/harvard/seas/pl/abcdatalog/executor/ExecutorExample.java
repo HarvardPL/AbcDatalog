@@ -98,24 +98,18 @@ public class ExecutorExample {
 		
 		// Every time a new tuple is added to the transitive closure relation,
 		// print it out.
-		ex.registerListener(tc, new DatalogListener() {
-			@Override
-			public void newFactDerived(PositiveAtom fact) {
-				synchronized (System.out) {
-					System.out.println("Fact derived: " + fact);
-				}
-			}
-		});
+		ex.registerListener(tc, fact -> {
+            synchronized (System.out) {
+                System.out.println("Fact derived: " + fact);
+            }
+        });
 
 		// Notify us if a cycle is detected.
-		ex.registerListener(cycle, new DatalogListener() {
-			@Override
-			public void newFactDerived(PositiveAtom fact) {
-				synchronized (System.out) {
-					System.out.println("*** Cycle detected. ***");
-				}
-			}
-		});
+		ex.registerListener(cycle, fact -> {
+            synchronized (System.out) {
+                System.out.println("*** Cycle detected. ***");
+            }
+        });
 
 		// 3. Start the executor.
 		
