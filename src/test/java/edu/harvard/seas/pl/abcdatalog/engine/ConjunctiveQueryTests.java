@@ -1,4 +1,4 @@
-package edu.harvard.seas.pl.abcdatalog.engine.testing;
+package edu.harvard.seas.pl.abcdatalog.engine;
 
 /*-
  * #%L
@@ -46,7 +46,6 @@ import java.util.function.Supplier;
 import org.junit.Test;
 
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
-import edu.harvard.seas.pl.abcdatalog.engine.DatalogEngine;
 import edu.harvard.seas.pl.abcdatalog.parser.DatalogParseException;
 import edu.harvard.seas.pl.abcdatalog.parser.DatalogParser;
 import edu.harvard.seas.pl.abcdatalog.parser.DatalogTokenizer;

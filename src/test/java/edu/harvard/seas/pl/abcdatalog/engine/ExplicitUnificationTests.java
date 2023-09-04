@@ -1,4 +1,4 @@
-package edu.harvard.seas.pl.abcdatalog.engine.testing;
+package edu.harvard.seas.pl.abcdatalog.engine;
 
 /*-
  * #%L
@@ -43,9 +43,8 @@ import org.junit.Test;
 
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
-import edu.harvard.seas.pl.abcdatalog.engine.DatalogEngine;
 
-public class ExplicitUnificationTests extends AbstractTests {
+public abstract class ExplicitUnificationTests extends AbstractTests {
 
 	public ExplicitUnificationTests(Supplier<DatalogEngine> engineFactory) {
 		super(engineFactory);

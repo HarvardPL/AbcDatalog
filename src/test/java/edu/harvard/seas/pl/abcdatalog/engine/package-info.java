@@ -1,4 +1,9 @@
-package edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent;
+/**
+ * This package contains classes for testing the correctness of an
+ * implementation of {@link edu.harvard.seas.pl.abcdatalog.engine}. Different
+ * classes test different language features.
+ */
+package edu.harvard.seas.pl.abcdatalog.engine;
 
 /*-
  * #%L
@@ -32,20 +37,3 @@ package edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent;
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-
-
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.BottomUpEngineFrame;
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.EvalManager;
-
-/**
- * A concurrent bottom-up Datalog engine that employs a saturation algorithm
- * similar to semi-naive evaluation. It supports explicit unification.
- *
- */
-
-public class ConcurrentBottomUpEngine extends BottomUpEngineFrame<EvalManager> {
-
-	public ConcurrentBottomUpEngine() {
-		super(new BottomUpEvalManager());
-	}
-}

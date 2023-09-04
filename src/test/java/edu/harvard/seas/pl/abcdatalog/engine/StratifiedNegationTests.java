@@ -1,4 +1,4 @@
-package edu.harvard.seas.pl.abcdatalog.engine.testing;
+package edu.harvard.seas.pl.abcdatalog.engine;
 
 /*-
  * #%L
@@ -44,7 +44,6 @@ import org.junit.Test;
 
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
-import edu.harvard.seas.pl.abcdatalog.engine.DatalogEngine;
 
 public abstract class StratifiedNegationTests extends AbstractTests {
 
