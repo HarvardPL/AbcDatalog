@@ -44,9 +44,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 import edu.harvard.seas.pl.abcdatalog.ast.Clause;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.PredicateSym;
@@ -59,9 +56,6 @@ import edu.harvard.seas.pl.abcdatalog.engine.bottomup.ClauseEvaluator;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.EvalManager;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.SemiNaiveClauseAnnotator;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.SemiNaiveClauseAnnotator.SemiNaiveClause;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.ConjunctiveQueryTests;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.CoreTests;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.ExplicitUnificationTests;
 import edu.harvard.seas.pl.abcdatalog.util.Box;
 import edu.harvard.seas.pl.abcdatalog.util.ExecutorServiceCounter;
 import edu.harvard.seas.pl.abcdatalog.util.Utilities;
@@ -79,11 +73,7 @@ import edu.harvard.seas.pl.abcdatalog.util.substitution.ConstOnlySubstitution;
  * bundled together during evaluation).
  *
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	ConcurrentChunkedBottomUpEngine.MyCoreTests.class,
-	ConcurrentChunkedBottomUpEngine.MyUnificationTests.class,
-	})
+
 public class ConcurrentChunkedBottomUpEngine extends BottomUpEngineFrame<EvalManager> {
 
 	public ConcurrentChunkedBottomUpEngine(int chunkSize) {
@@ -208,31 +198,5 @@ public class ConcurrentChunkedBottomUpEngine extends BottomUpEngineFrame<EvalMan
 			}
 
 		}
-
 	}
-
-	public static class MyCoreTests extends CoreTests {
-
-		public MyCoreTests() {
-			super(() -> new ConcurrentChunkedBottomUpEngine(4));
-		}
-
-	}
-
-	public static class MyUnificationTests extends ExplicitUnificationTests {
-
-		public MyUnificationTests() {
-			super(() -> new ConcurrentChunkedBottomUpEngine(4));
-		}
-
-	}
-	
-	public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
-
-		public MyConjunctiveQueryTests() {
-			super(() -> new ConcurrentChunkedBottomUpEngine(4));
-		}
-
-	}
-
 }

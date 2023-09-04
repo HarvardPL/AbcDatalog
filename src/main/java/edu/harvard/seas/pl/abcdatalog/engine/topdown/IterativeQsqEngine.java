@@ -44,27 +44,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 import edu.harvard.seas.pl.abcdatalog.ast.Constant;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.Term;
 import edu.harvard.seas.pl.abcdatalog.ast.Variable;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidator.ValidClause;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.ConjunctiveQueryTests;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.CoreTests;
 
 /**
  * A Datalog evaluation engine that uses an iterative version of the
  * query-subquery top-down technique.
  *
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	IterativeQsqEngine.MyCoreTests.class,
-	IterativeQsqEngine.MyConjunctiveQueryTests.class
-})
+
 public class IterativeQsqEngine extends AbstractQsqEngine {
 
 	@Override
@@ -536,21 +527,4 @@ public class IterativeQsqEngine extends AbstractQsqEngine {
 			this.newInfo = newInfo;
 		}
 	}
-
-	public static class MyCoreTests extends CoreTests {
-
-		public MyCoreTests() {
-			super(() -> new IterativeQsqEngine());
-		}
-
-	}
-	
-	public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
-
-		public MyConjunctiveQueryTests() {
-			super(() -> new IterativeQsqEngine());
-		}
-
-	}
-
 }

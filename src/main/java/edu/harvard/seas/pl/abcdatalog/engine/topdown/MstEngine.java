@@ -42,9 +42,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 import edu.harvard.seas.pl.abcdatalog.ast.Clause;
 import edu.harvard.seas.pl.abcdatalog.ast.Constant;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
@@ -53,13 +50,11 @@ import edu.harvard.seas.pl.abcdatalog.ast.Premise;
 import edu.harvard.seas.pl.abcdatalog.ast.Term;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidator;
-import edu.harvard.seas.pl.abcdatalog.ast.validation.UnstratifiedProgram;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidator.ValidClause;
+import edu.harvard.seas.pl.abcdatalog.ast.validation.UnstratifiedProgram;
 import edu.harvard.seas.pl.abcdatalog.ast.visitors.HeadVisitor;
 import edu.harvard.seas.pl.abcdatalog.engine.DatalogEngine;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentBottomUpEngine;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.ConjunctiveQueryTests;
-import edu.harvard.seas.pl.abcdatalog.engine.testing.CoreTests;
 import edu.harvard.seas.pl.abcdatalog.util.Utilities;
 
 /**
@@ -70,11 +65,7 @@ import edu.harvard.seas.pl.abcdatalog.util.Utilities;
  * <b>NOTE:</b> predicate symbols that use '%' might not work with this engine.
  *
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	MstEngine.MyCoreTests.class,
-	MstEngine.MyConjunctiveQueryTests.class
-})
+
 public class MstEngine implements DatalogEngine {
 	// FIXME The predicate symbol issue noted in the Javadocs is awkward.
 	
@@ -450,21 +441,4 @@ public class MstEngine implements DatalogEngine {
 		PositiveAtom head = createInputAtom(headPred, headArgs);
 		return new Clause(head, body);
 	}
-
-	public static class MyCoreTests extends CoreTests {
-
-		public MyCoreTests() {
-			super(() -> new MstEngine());
-		}
-
-	}
-	
-	public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
-
-		public MyConjunctiveQueryTests() {
-			super(() -> new MstEngine());
-		}
-
-	}
-
 }

@@ -1,4 +1,4 @@
-package edu.harvard.seas.pl.abcdatalog.engine.testing;
+package edu.harvard.seas.pl.abcdatalog.engine;
 
 /*-
  * #%L
@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.engine.testing;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -36,28 +36,36 @@ package edu.harvard.seas.pl.abcdatalog.engine.testing;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentBottomUpEngine;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentChunkedBottomUpEngine;
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentStratifiedNegationBottomUpEngine;
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.sequential.SemiNaiveEngine;
-import edu.harvard.seas.pl.abcdatalog.engine.topdown.IterativeQsqEngine;
-import edu.harvard.seas.pl.abcdatalog.engine.topdown.MstEngine;
-import edu.harvard.seas.pl.abcdatalog.engine.topdown.RecursiveQsqEngine;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	ConcurrentBottomUpEngine.class,
-	ConcurrentChunkedBottomUpEngine.class,
-	ConcurrentStratifiedNegationBottomUpEngine.class,
-	SemiNaiveEngine.class,
-	RecursiveQsqEngine.class,
-	IterativeQsqEngine.class,
-	MstEngine.class
+        ConcurrentChunkedBottomUpEngineTest.MyCoreTests.class,
+        ConcurrentChunkedBottomUpEngineTest.MyUnificationTests.class,
 })
-public class RunAllTests {
+public class ConcurrentChunkedBottomUpEngineTest {
 
-	public RunAllTests() {
-		
-	}
+    public static class MyCoreTests extends CoreTests {
 
+        public MyCoreTests() {
+            super(() -> new ConcurrentChunkedBottomUpEngine(4));
+        }
+
+    }
+
+    public static class MyUnificationTests extends ExplicitUnificationTests {
+
+        public MyUnificationTests() {
+            super(() -> new ConcurrentChunkedBottomUpEngine(4));
+        }
+
+    }
+
+    public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
+
+        public MyConjunctiveQueryTests() {
+            super(() -> new ConcurrentChunkedBottomUpEngine(4));
+        }
+
+    }
 }
