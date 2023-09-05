@@ -66,7 +66,7 @@ public class ExtensibleBottomUpEvalManager extends BottomUpEvalManager {
 
 	private volatile boolean isInitialized = false, isEvaluated = false, isFinishing = false;
 	private final AtomicInteger ongoingAdds = new AtomicInteger();
-	Object lock = new Object();
+	final Object lock = new Object();
 
 	/**
 	 * Constructs a concurrent semi-naive evaluation manager that supports the
