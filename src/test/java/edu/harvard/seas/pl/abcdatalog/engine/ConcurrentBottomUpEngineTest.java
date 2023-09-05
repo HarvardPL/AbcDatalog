@@ -48,7 +48,7 @@ public class ConcurrentBottomUpEngineTest {
     public static class MyCoreTests extends CoreTests {
 
         public MyCoreTests() {
-            super(() -> new ConcurrentBottomUpEngine());
+            super(ConcurrentBottomUpEngine::new);
         }
 
     }
@@ -56,7 +56,7 @@ public class ConcurrentBottomUpEngineTest {
     public static class MyUnificationTests extends ExplicitUnificationTests {
 
         public MyUnificationTests() {
-            super(() -> new ConcurrentBottomUpEngine());
+            super(ConcurrentBottomUpEngine::new);
         }
 
     }
@@ -64,7 +64,7 @@ public class ConcurrentBottomUpEngineTest {
     public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
         public MyConjunctiveQueryTests() {
-            super(() -> new ConcurrentBottomUpEngine());
+            super(ConcurrentBottomUpEngine::new);
         }
 
     }

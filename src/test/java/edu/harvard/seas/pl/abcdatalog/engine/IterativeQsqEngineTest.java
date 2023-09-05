@@ -47,7 +47,7 @@ public class IterativeQsqEngineTest {
     public static class MyCoreTests extends CoreTests {
 
         public MyCoreTests() {
-            super(() -> new IterativeQsqEngine());
+            super(IterativeQsqEngine::new);
         }
 
     }
@@ -55,7 +55,7 @@ public class IterativeQsqEngineTest {
     public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
         public MyConjunctiveQueryTests() {
-            super(() -> new IterativeQsqEngine());
+            super(IterativeQsqEngine::new);
         }
 
     }

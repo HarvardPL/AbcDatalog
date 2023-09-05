@@ -47,7 +47,7 @@ public class MstEngineTest {
     public static class MyCoreTests extends CoreTests {
 
         public MyCoreTests() {
-            super(() -> new MstEngine());
+            super(MstEngine::new);
         }
 
     }
@@ -55,7 +55,7 @@ public class MstEngineTest {
     public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
         public MyConjunctiveQueryTests() {
-            super(() -> new MstEngine());
+            super(MstEngine::new);
         }
 
     }
