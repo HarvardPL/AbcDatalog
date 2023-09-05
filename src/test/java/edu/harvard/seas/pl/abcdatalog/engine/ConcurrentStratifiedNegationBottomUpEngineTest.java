@@ -48,7 +48,7 @@ public class ConcurrentStratifiedNegationBottomUpEngineTest {
     public static class MyCoreTests extends CoreTests {
 
         public MyCoreTests() {
-            super(() -> new ConcurrentStratifiedNegationBottomUpEngine());
+            super(ConcurrentStratifiedNegationBottomUpEngine::new);
         }
 
     }
@@ -56,7 +56,7 @@ public class ConcurrentStratifiedNegationBottomUpEngineTest {
     public static class MyUnificationTests extends ExplicitUnificationTests {
 
         public MyUnificationTests() {
-            super(() -> new ConcurrentStratifiedNegationBottomUpEngine());
+            super(ConcurrentStratifiedNegationBottomUpEngine::new);
         }
 
     }
@@ -64,7 +64,7 @@ public class ConcurrentStratifiedNegationBottomUpEngineTest {
     public static class MyNegationTests extends StratifiedNegationTests {
 
         public MyNegationTests() {
-            super(() -> new ConcurrentStratifiedNegationBottomUpEngine());
+            super(ConcurrentStratifiedNegationBottomUpEngine::new);
         }
 
     }
@@ -72,7 +72,7 @@ public class ConcurrentStratifiedNegationBottomUpEngineTest {
     public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
         public MyConjunctiveQueryTests() {
-            super(() -> new ConcurrentStratifiedNegationBottomUpEngine());
+            super(ConcurrentStratifiedNegationBottomUpEngine::new);
         }
 
     }

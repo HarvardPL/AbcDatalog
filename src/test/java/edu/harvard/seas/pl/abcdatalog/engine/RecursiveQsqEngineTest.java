@@ -47,7 +47,7 @@ public class RecursiveQsqEngineTest {
     public static class MyCoreTests extends CoreTests {
 
         public MyCoreTests() {
-            super(() -> new RecursiveQsqEngine());
+            super(RecursiveQsqEngine::new);
         }
 
     }
@@ -55,7 +55,7 @@ public class RecursiveQsqEngineTest {
     public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
         public MyConjunctiveQueryTests() {
-            super(() -> new RecursiveQsqEngine());
+            super(RecursiveQsqEngine::new);
         }
 
     }
