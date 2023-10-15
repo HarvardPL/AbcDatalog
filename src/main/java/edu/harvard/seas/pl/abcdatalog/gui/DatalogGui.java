@@ -33,15 +33,12 @@ package edu.harvard.seas.pl.abcdatalog.gui;
  * #L%
  */
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -51,30 +48,10 @@ import java.nio.file.Files;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -106,7 +83,7 @@ public class DatalogGui extends JFrame {
 	private volatile boolean programLoaded = false;
 	private final JFileChooser fileChooser;
 	private volatile DatalogEngine engine;
-	private final int defaultFontSize = 12;
+	private int fontSizeDelta = 0;
 	private final UndoManager undoManager = new UndoManager();
 
 	/**
@@ -135,7 +112,6 @@ public class DatalogGui extends JFrame {
 		editorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		editorPanel.add(editorLabel, BorderLayout.NORTH);
 		this.program = new TextEditor(20, 60);
-		this.program.setFont(new Font(Font.DIALOG, Font.PLAIN, this.defaultFontSize));
 		this.program.setLineWrap(true);
 		this.program.setWrapStyleWord(true);
 		this.program.getDocument().addUndoableEditListener(this.undoManager);
@@ -342,7 +318,7 @@ public class DatalogGui extends JFrame {
 				"Default zoom",
 				'd',
 				KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK),
-				e -> zoomText(0)
+				e -> zoomText(-fontSizeDelta)
 		);
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('f');
@@ -532,10 +508,22 @@ public class DatalogGui extends JFrame {
 	 * 				   the increment to add to the old font size
 	 */
 	private void zoomText(int increment) {
-		Font oldFont = program.getFont();
-		int newSize = increment == 0 ? defaultFontSize : oldFont.getSize() + increment;
-		Font newFont = new Font(oldFont.getFontName(), oldFont.getStyle(), newSize);
-		program.setFont(newFont);
+		for (Object key : UIManager.getDefaults().keySet()) {
+			Object value = UIManager.get(key);
+			if (value instanceof Font) {
+				Font font = (Font) value;
+				int newSize = font.getSize() + increment;
+				Font newFont;
+				if (font instanceof FontUIResource) {
+					newFont = new FontUIResource(font.getFontName(), font.getStyle(), newSize);
+				} else {
+					newFont = new Font(font.getFontName(), font.getStyle(), newSize);
+				}
+				UIManager.put(key, newFont);
+			}
+		}
+		SwingUtilities.updateComponentTreeUI(this);
+		fontSizeDelta += increment;
 	}
 
 	/**
