@@ -184,12 +184,10 @@ public final class DatalogParser {
 	 * 
 	 * @param t
 	 *            the token stream
-	 * @param vars
-	 *            records the variables in this atom
 	 * @return the atom
 	 * @throws DatalogParseException
 	 */
-	private static PositiveAtom parsePositiveAtom(DatalogTokenizer t) throws DatalogParseException {
+	public static PositiveAtom parsePositiveAtom(DatalogTokenizer t) throws DatalogParseException {
 		return parsePositiveAtom(parseIdentifier(t), t);
 	}
 
