@@ -17,14 +17,15 @@ mvn license:update-file-header
 mvn com.spotify.fmt:fmt-maven-plugin:format
 # Generate Javadocs
 mvn javadoc:javadoc
-git add src
-git commit -allow-empty -m "Release commit."
+git stash
 
 # Update the Javadocs on the website
 git checkout gh-pages
 rm -rf apidocs
 cp -r target/site/apidocs .
 git add apidocs
-git commit –allow-empty -m "Update Javadocs."
+git commit -m "Update Javadocs."
 git push
+
 git checkout master
+git stash pop
