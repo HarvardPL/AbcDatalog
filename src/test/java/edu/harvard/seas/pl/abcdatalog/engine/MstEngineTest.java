@@ -33,30 +33,24 @@ package edu.harvard.seas.pl.abcdatalog.engine;
  * #L%
  */
 
+import edu.harvard.seas.pl.abcdatalog.engine.topdown.MstEngine;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import edu.harvard.seas.pl.abcdatalog.engine.topdown.MstEngine;
-
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-        MstEngineTest.MyCoreTests.class,
-        MstEngineTest.MyConjunctiveQueryTests.class
-})
+@Suite.SuiteClasses({MstEngineTest.MyCoreTests.class, MstEngineTest.MyConjunctiveQueryTests.class})
 public class MstEngineTest {
-    public static class MyCoreTests extends CoreTests {
+  public static class MyCoreTests extends CoreTests {
 
-        public MyCoreTests() {
-            super(MstEngine::new);
-        }
-
+    public MyCoreTests() {
+      super(MstEngine::new);
     }
+  }
 
-    public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
+  public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
-        public MyConjunctiveQueryTests() {
-            super(MstEngine::new);
-        }
-
+    public MyConjunctiveQueryTests() {
+      super(MstEngine::new);
     }
+  }
 }

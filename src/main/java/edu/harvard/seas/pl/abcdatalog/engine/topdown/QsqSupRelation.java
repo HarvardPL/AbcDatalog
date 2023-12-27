@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.engine.topdown;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -36,77 +36,60 @@ package edu.harvard.seas.pl.abcdatalog.engine.topdown;
 /**
  * A supplementary relation used in QSQ evaluation. <br>
  * <br>
- * It is modeled as a node in a linked list. The intention is that each node
- * contains the tuples for the supplementary relation itself, a pointer to the
- * atom that appears after the supplementary relation in the relevant rule, and
- * a pointer to the next supplementary relation in the same rule.
- *
+ * It is modeled as a node in a linked list. The intention is that each node contains the tuples for
+ * the supplementary relation itself, a pointer to the atom that appears after the supplementary
+ * relation in the relevant rule, and a pointer to the next supplementary relation in the same rule.
  */
 public class QsqSupRelation extends Relation {
-	/**
-	 * Points to the next supplementary relation in the rule being evaluated.
-	 */
-	public QsqSupRelation next;
-	/**
-	 * Points to the atom that follows this supplementary relation in the rule
-	 * being evaluated.
-	 */
-	public AdornedAtom nextAtom;
+  /** Points to the next supplementary relation in the rule being evaluated. */
+  public QsqSupRelation next;
 
-	/**
-	 * Constructs an empty supplementary relation with the supplied schema.
-	 * 
-	 * @param schema
-	 *            schema of supplementary relation
-	 */
-	public QsqSupRelation(TermSchema schema) {
-		super(schema);
-		nextAtom = null;
-		next = null;
-	}
+  /** Points to the atom that follows this supplementary relation in the rule being evaluated. */
+  public AdornedAtom nextAtom;
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString());
-		sb.append("; Next atom: ");
-		if (nextAtom != null) {
-			sb.append(nextAtom);
-		}
-		return sb.toString();
-	}
+  /**
+   * Constructs an empty supplementary relation with the supplied schema.
+   *
+   * @param schema schema of supplementary relation
+   */
+  public QsqSupRelation(TermSchema schema) {
+    super(schema);
+    nextAtom = null;
+    next = null;
+  }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((next == null) ? 0 : next.hashCode());
-		result = prime * result + ((nextAtom == null) ? 0 : nextAtom.hashCode());
-		return result;
-	}
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(super.toString());
+    sb.append("; Next atom: ");
+    if (nextAtom != null) {
+      sb.append(nextAtom);
+    }
+    return sb.toString();
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		QsqSupRelation other = (QsqSupRelation) obj;
-		if (next == null) {
-			if (other.next != null)
-				return false;
-		} else if (!next.equals(other.next))
-			return false;
-		if (nextAtom == null) {
-			if (other.nextAtom != null)
-				return false;
-		} else if (!nextAtom.equals(other.nextAtom))
-			return false;
-		return true;
-	}
-	
-	
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((next == null) ? 0 : next.hashCode());
+    result = prime * result + ((nextAtom == null) ? 0 : nextAtom.hashCode());
+    return result;
+  }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (!super.equals(obj)) return false;
+    if (getClass() != obj.getClass()) return false;
+    QsqSupRelation other = (QsqSupRelation) obj;
+    if (next == null) {
+      if (other.next != null) return false;
+    } else if (!next.equals(other.next)) return false;
+    if (nextAtom == null) {
+      if (other.nextAtom != null) return false;
+    } else if (!nextAtom.equals(other.nextAtom)) return false;
+    return true;
+  }
 }

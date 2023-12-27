@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.ast;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -33,75 +33,64 @@ package edu.harvard.seas.pl.abcdatalog.ast;
  * #L%
  */
 
+import edu.harvard.seas.pl.abcdatalog.ast.visitors.TermVisitor;
+import edu.harvard.seas.pl.abcdatalog.util.substitution.Substitution;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import edu.harvard.seas.pl.abcdatalog.ast.visitors.TermVisitor;
-import edu.harvard.seas.pl.abcdatalog.util.substitution.Substitution;
-
-/**
- * A zero-ary function symbol (i.e., a constant in Datalog).
- *
- */
+/** A zero-ary function symbol (i.e., a constant in Datalog). */
 public class Constant implements Term {
-	/**
-	 * Identifier of the constant.
-	 */
-	private final String name;
+  /** Identifier of the constant. */
+  private final String name;
 
-	/**
-	 * A map for memoization.
-	 */
-	private static final ConcurrentMap<String, Constant> memo = new ConcurrentHashMap<>();
+  /** A map for memoization. */
+  private static final ConcurrentMap<String, Constant> memo = new ConcurrentHashMap<>();
 
-	/**
-	 * Returns a constant with the given string identifier.
-	 * 
-	 * @param name
-	 *            the string identifier
-	 * @return the constant
-	 */
-	public static Constant create(String name) {
-		Constant c = memo.get(name);
-		if (c != null) {
-			return c;
-		}
-		// try creating it
-		c = new Constant(name);
-		Constant existing = memo.putIfAbsent(name, c);
-		if (existing != null) {
-			return existing;
-		}
-		return c;
-	}
-	
-	/**
-	 * Constructs a constant with the given name.
-	 * 
-	 * @param name
-	 *            name
-	 */
-	private Constant(String name) {
-		this.name = name;
-	}
+  /**
+   * Returns a constant with the given string identifier.
+   *
+   * @param name the string identifier
+   * @return the constant
+   */
+  public static Constant create(String name) {
+    Constant c = memo.get(name);
+    if (c != null) {
+      return c;
+    }
+    // try creating it
+    c = new Constant(name);
+    Constant existing = memo.putIfAbsent(name, c);
+    if (existing != null) {
+      return existing;
+    }
+    return c;
+  }
 
-	public String getName() {
-		return name;
-	}
+  /**
+   * Constructs a constant with the given name.
+   *
+   * @param name name
+   */
+  private Constant(String name) {
+    this.name = name;
+  }
 
-	@Override
-	public String toString() {
-		return this.getName();
-	}
+  public String getName() {
+    return name;
+  }
 
-	@Override
-	public <I, O> O accept(TermVisitor<I, O> visitor, I state) {
-		return visitor.visit(this, state);
-	}
+  @Override
+  public String toString() {
+    return this.getName();
+  }
 
-	@Override
-	public Term applySubst(Substitution subst) {
-		return this;
-	}
+  @Override
+  public <I, O> O accept(TermVisitor<I, O> visitor, I state) {
+    return visitor.visit(this, state);
+  }
 
+  @Override
+  public Term applySubst(Substitution subst) {
+    return this;
+  }
 }

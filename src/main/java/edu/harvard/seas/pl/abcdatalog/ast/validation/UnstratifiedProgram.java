@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.ast.validation;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -33,27 +33,24 @@ package edu.harvard.seas.pl.abcdatalog.ast.validation;
  * #L%
  */
 
-import java.util.Set;
-
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.PredicateSym;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidator.ValidClause;
+import java.util.Set;
 
 /**
- * A Datalog program for which each rule and initial fact has been independently
- * validated, but the program as a whole has not been validated. That is, it
- * guarantees that each clause of a program is independently valid, but says
- * nothing about whether the clauses taken together make sense. This might be a
- * concern for language features such as negation, where certain dependencies
+ * A Datalog program for which each rule and initial fact has been independently validated, but the
+ * program as a whole has not been validated. That is, it guarantees that each clause of a program
+ * is independently valid, but says nothing about whether the clauses taken together make sense.
+ * This might be a concern for language features such as negation, where certain dependencies
  * between clauses are undesirable.
- * 
  */
 public interface UnstratifiedProgram {
-	Set<ValidClause> getRules();
+  Set<ValidClause> getRules();
 
-	Set<PositiveAtom> getInitialFacts();
+  Set<PositiveAtom> getInitialFacts();
 
-	Set<PredicateSym> getEdbPredicateSyms();
+  Set<PredicateSym> getEdbPredicateSyms();
 
-	Set<PredicateSym> getIdbPredicateSyms();
+  Set<PredicateSym> getIdbPredicateSyms();
 }

@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.util;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -39,120 +39,105 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * A wrapper for an executor service that tracks how many tasks are either
- * pending or incomplete, and can be used to block until all tasks have
- * finished.
+ * A wrapper for an executor service that tracks how many tasks are either pending or incomplete,
+ * and can be used to block until all tasks have finished.
  */
 public class ExecutorServiceCounter {
-	/**
-	 * Number of pending or incomplete tasks.
-	 */
-	private final AtomicLong tasks = new AtomicLong(0);
-	/**
-	 * The executor service to submit tasks to.
-	 */
-	private final ExecutorService exec;
+  /** Number of pending or incomplete tasks. */
+  private final AtomicLong tasks = new AtomicLong(0);
 
-	/**
-	 * Constructs an ExecutorServiceCounter backed by the given ExecutorService.
-	 * The supplied ExecutorService should only be accessed via the
-	 * ExecutorServiceCounter.
-	 * 
-	 * @param exec
-	 *            the ExecutorService to back the ExecutorServiceCounter
-	 */
-	public ExecutorServiceCounter(ExecutorService exec) {
-		this.exec = exec;
-	}
+  /** The executor service to submit tasks to. */
+  private final ExecutorService exec;
 
-	/**
-	 * Reports that a task has been completed.
-	 */
-	private void taskFinished() {
-		if (this.tasks.decrementAndGet() == 0) {
-			synchronized (this) {
-				this.notifyAll();
-			}
-		}
-	}
+  /**
+   * Constructs an ExecutorServiceCounter backed by the given ExecutorService. The supplied
+   * ExecutorService should only be accessed via the ExecutorServiceCounter.
+   *
+   * @param exec the ExecutorService to back the ExecutorServiceCounter
+   */
+  public ExecutorServiceCounter(ExecutorService exec) {
+    this.exec = exec;
+  }
 
-	/**
-	 * Adds a task to be tracked by this ExecutorServiceCounter. If this method
-	 * is invoked from a ForkJoinPool worker thread, the task is forked in that
-	 * ForkJoinPool. Otherwise, it is submitted to the ExecutorService backing
-	 * this ExecutorServiceCounter.
-	 * 
-	 * @param task
-	 *            the task
-	 */
-	@SuppressWarnings("serial")
-	public void submitTask(Runnable task) {
-		this.tasks.incrementAndGet();
-		if (RecursiveAction.inForkJoinPool()) {
-			new RecursiveAction() {
+  /** Reports that a task has been completed. */
+  private void taskFinished() {
+    if (this.tasks.decrementAndGet() == 0) {
+      synchronized (this) {
+        this.notifyAll();
+      }
+    }
+  }
 
-				@Override
-				protected void compute() {
-					task.run();
-					taskFinished();
-				}
-				
-			}.fork();
-		} else {
-			this.exec.execute(new Runnable() {
-	
-				@Override
-				public void run() {
-					task.run();
-					taskFinished();
-				}
-				
-			});
-		}
-	}
+  /**
+   * Adds a task to be tracked by this ExecutorServiceCounter. If this method is invoked from a
+   * ForkJoinPool worker thread, the task is forked in that ForkJoinPool. Otherwise, it is submitted
+   * to the ExecutorService backing this ExecutorServiceCounter.
+   *
+   * @param task the task
+   */
+  @SuppressWarnings("serial")
+  public void submitTask(Runnable task) {
+    this.tasks.incrementAndGet();
+    if (RecursiveAction.inForkJoinPool()) {
+      new RecursiveAction() {
 
-	/**
-	 * Returns whether this ExecutorServiceCounter is aware of any pending or
-	 * incomplete tasks.
-	 * 
-	 * @return whether there are any pending or incomplete tasks
-	 */
-	private boolean hasUnfinishedTasks() {
-		return this.tasks.get() > 0;
-	}
+        @Override
+        protected void compute() {
+          task.run();
+          taskFinished();
+        }
+      }.fork();
+    } else {
+      this.exec.execute(
+          new Runnable() {
 
-	/**
-	 * Blocks the calling thread until this ExecutorServiceCounter has no
-	 * pending or incomplete tasks.
-	 */
-	public void blockUntilFinished() {
-		synchronized (this) {
-			while (this.hasUnfinishedTasks()) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// we've been interrupted
-				}
-			}
-		}
-	}
+            @Override
+            public void run() {
+              task.run();
+              taskFinished();
+            }
+          });
+    }
+  }
 
-	/**
-	 * Shutdowns the ExecutorService backing this ExecutorServiceCounter (i.e.,
-	 * so it stops accepting new tasks) and blocks until any outstanding tasks
-	 * have been completed.
-	 */
-	public void shutdownAndAwaitTermination() {
-		this.exec.shutdown();
-		boolean finished = false;
-		// keep waiting until we successfully finish all the outstanding tasks
-		do {
-			try {
-				finished = this.exec
-						.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		} while (!finished);
-	}
+  /**
+   * Returns whether this ExecutorServiceCounter is aware of any pending or incomplete tasks.
+   *
+   * @return whether there are any pending or incomplete tasks
+   */
+  private boolean hasUnfinishedTasks() {
+    return this.tasks.get() > 0;
+  }
+
+  /**
+   * Blocks the calling thread until this ExecutorServiceCounter has no pending or incomplete tasks.
+   */
+  public void blockUntilFinished() {
+    synchronized (this) {
+      while (this.hasUnfinishedTasks()) {
+        try {
+          this.wait();
+        } catch (InterruptedException e) {
+          // we've been interrupted
+        }
+      }
+    }
+  }
+
+  /**
+   * Shutdowns the ExecutorService backing this ExecutorServiceCounter (i.e., so it stops accepting
+   * new tasks) and blocks until any outstanding tasks have been completed.
+   */
+  public void shutdownAndAwaitTermination() {
+    this.exec.shutdown();
+    boolean finished = false;
+    // keep waiting until we successfully finish all the outstanding tasks
+    do {
+      try {
+        finished = this.exec.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    } while (!finished);
+  }
 }

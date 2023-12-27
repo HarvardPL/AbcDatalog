@@ -33,47 +33,42 @@ package edu.harvard.seas.pl.abcdatalog.engine;
  * #L%
  */
 
+import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentStratifiedNegationBottomUpEngine;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentStratifiedNegationBottomUpEngine;
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ConcurrentStratifiedNegationBottomUpEngineTest.MyCoreTests.class,
-        ConcurrentStratifiedNegationBottomUpEngineTest.MyUnificationTests.class,
-        ConcurrentStratifiedNegationBottomUpEngineTest.MyNegationTests.class
+  ConcurrentStratifiedNegationBottomUpEngineTest.MyCoreTests.class,
+  ConcurrentStratifiedNegationBottomUpEngineTest.MyUnificationTests.class,
+  ConcurrentStratifiedNegationBottomUpEngineTest.MyNegationTests.class
 })
 public class ConcurrentStratifiedNegationBottomUpEngineTest {
-    public static class MyCoreTests extends CoreTests {
+  public static class MyCoreTests extends CoreTests {
 
-        public MyCoreTests() {
-            super(ConcurrentStratifiedNegationBottomUpEngine::new);
-        }
-
+    public MyCoreTests() {
+      super(ConcurrentStratifiedNegationBottomUpEngine::new);
     }
+  }
 
-    public static class MyUnificationTests extends ExplicitUnificationTests {
+  public static class MyUnificationTests extends ExplicitUnificationTests {
 
-        public MyUnificationTests() {
-            super(ConcurrentStratifiedNegationBottomUpEngine::new);
-        }
-
+    public MyUnificationTests() {
+      super(ConcurrentStratifiedNegationBottomUpEngine::new);
     }
+  }
 
-    public static class MyNegationTests extends StratifiedNegationTests {
+  public static class MyNegationTests extends StratifiedNegationTests {
 
-        public MyNegationTests() {
-            super(ConcurrentStratifiedNegationBottomUpEngine::new);
-        }
-
+    public MyNegationTests() {
+      super(ConcurrentStratifiedNegationBottomUpEngine::new);
     }
+  }
 
-    public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
+  public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
-        public MyConjunctiveQueryTests() {
-            super(ConcurrentStratifiedNegationBottomUpEngine::new);
-        }
-
+    public MyConjunctiveQueryTests() {
+      super(ConcurrentStratifiedNegationBottomUpEngine::new);
     }
+  }
 }
