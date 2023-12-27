@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.executor;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -33,94 +33,79 @@ package edu.harvard.seas.pl.abcdatalog.executor;
  * #L%
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
 import edu.harvard.seas.pl.abcdatalog.ast.Clause;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.PredicateSym;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidationException;
 import edu.harvard.seas.pl.abcdatalog.ast.validation.DatalogValidator;
 import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ExtensibleBottomUpEvalManager;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * A Datalog executor that runs the actual Datalog evaluation concurrently in
- * separate threads.
- *
- */
+/** A Datalog executor that runs the actual Datalog evaluation concurrently in separate threads. */
 public class DatalogParallelExecutor implements DatalogExecutor {
-	/**
-	 * Whether the runner thread has been started. This is guarded by this
-	 * executor's inherent lock.
-	 */
-	private volatile boolean isInitialized = false, isRunning = false;
-	/**
-	 * Whether executor has been initialized.
-	 */
-	/**
-	 * The set of EDB relations that can be dynamically extended.
-	 */
-	private volatile Set<PredicateSym> extensibleEdbPreds;
-	
-	private volatile ExtensibleBottomUpEvalManager eval;
+  /**
+   * Whether the runner thread has been started. This is guarded by this executor's inherent lock.
+   */
+  private volatile boolean isInitialized = false, isRunning = false;
 
-	@Override
-	public synchronized void initialize(Set<Clause> program,
-			Set<PredicateSym> extensibleEdbPreds) throws DatalogValidationException {
-		extensibleEdbPreds = new HashSet<>(extensibleEdbPreds);
-		extensibleEdbPreds.add(DatalogValidator.True.getTrueAtom().getPred());
-		if (this.isRunning) {
-			throw new IllegalStateException(
-					"Cannot initialize an executor that is already running).");
-		}
-		if (this.isInitialized) {
-			throw new IllegalStateException("Executor already initialized.");
-		}
-		this.eval = new ExtensibleBottomUpEvalManager(extensibleEdbPreds);
-		this.eval.initialize(program);
-		this.extensibleEdbPreds = extensibleEdbPreds;
-		this.isInitialized = true;
-	}
+  /** Whether executor has been initialized. */
+  /** The set of EDB relations that can be dynamically extended. */
+  private volatile Set<PredicateSym> extensibleEdbPreds;
 
-	@Override
-	public synchronized void start() {
-		if (this.isRunning) {
-			throw new IllegalStateException("Executor is already running.");
-		}
-		if (!this.isInitialized) {
-			throw new IllegalStateException(
-					"Executor has not been initialized.");
-		}
-		this.eval.eval();
-		this.isRunning = true;
-	}
+  private volatile ExtensibleBottomUpEvalManager eval;
 
-	@Override
-	public void shutdown() {
-		this.eval.finishAsynchronousEval();
-	}
-	
-	@Override
-	public void addFactAsynchronously(PositiveAtom edbFact) {
-		if (!this.isInitialized) {
-			throw new IllegalStateException(
-					"Executor must be initialized before adding facts.");
-		}
-		if (!edbFact.isGround()) {
-			throw new IllegalArgumentException("Atom is not ground.");
-		}
-		if (!this.extensibleEdbPreds.contains(edbFact.getPred())) {
-			throw new IllegalArgumentException(
-					"Atom is not part of an extendible EDB relation.");
-		}
+  @Override
+  public synchronized void initialize(Set<Clause> program, Set<PredicateSym> extensibleEdbPreds)
+      throws DatalogValidationException {
+    extensibleEdbPreds = new HashSet<>(extensibleEdbPreds);
+    extensibleEdbPreds.add(DatalogValidator.True.getTrueAtom().getPred());
+    if (this.isRunning) {
+      throw new IllegalStateException("Cannot initialize an executor that is already running).");
+    }
+    if (this.isInitialized) {
+      throw new IllegalStateException("Executor already initialized.");
+    }
+    this.eval = new ExtensibleBottomUpEvalManager(extensibleEdbPreds);
+    this.eval.initialize(program);
+    this.extensibleEdbPreds = extensibleEdbPreds;
+    this.isInitialized = true;
+  }
 
-		this.eval.addFact(edbFact);
-	}
+  @Override
+  public synchronized void start() {
+    if (this.isRunning) {
+      throw new IllegalStateException("Executor is already running.");
+    }
+    if (!this.isInitialized) {
+      throw new IllegalStateException("Executor has not been initialized.");
+    }
+    this.eval.eval();
+    this.isRunning = true;
+  }
 
-	@Override
-	public synchronized void registerListener(PredicateSym p,
-			DatalogListener listener) {
-		this.eval.addListener(p, listener);
-	}
+  @Override
+  public void shutdown() {
+    this.eval.finishAsynchronousEval();
+  }
 
+  @Override
+  public void addFactAsynchronously(PositiveAtom edbFact) {
+    if (!this.isInitialized) {
+      throw new IllegalStateException("Executor must be initialized before adding facts.");
+    }
+    if (!edbFact.isGround()) {
+      throw new IllegalArgumentException("Atom is not ground.");
+    }
+    if (!this.extensibleEdbPreds.contains(edbFact.getPred())) {
+      throw new IllegalArgumentException("Atom is not part of an extendible EDB relation.");
+    }
+
+    this.eval.addFact(edbFact);
+  }
+
+  @Override
+  public synchronized void registerListener(PredicateSym p, DatalogListener listener) {
+    this.eval.addListener(p, listener);
+  }
 }

@@ -33,30 +33,27 @@ package edu.harvard.seas.pl.abcdatalog.engine;
  * #L%
  */
 
+import edu.harvard.seas.pl.abcdatalog.engine.topdown.IterativeQsqEngine;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import edu.harvard.seas.pl.abcdatalog.engine.topdown.IterativeQsqEngine;
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        IterativeQsqEngineTest.MyCoreTests.class,
-        IterativeQsqEngineTest.MyConjunctiveQueryTests.class
+  IterativeQsqEngineTest.MyCoreTests.class,
+  IterativeQsqEngineTest.MyConjunctiveQueryTests.class
 })
 public class IterativeQsqEngineTest {
-    public static class MyCoreTests extends CoreTests {
+  public static class MyCoreTests extends CoreTests {
 
-        public MyCoreTests() {
-            super(IterativeQsqEngine::new);
-        }
-
+    public MyCoreTests() {
+      super(IterativeQsqEngine::new);
     }
+  }
 
-    public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
+  public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
-        public MyConjunctiveQueryTests() {
-            super(IterativeQsqEngine::new);
-        }
-
+    public MyConjunctiveQueryTests() {
+      super(IterativeQsqEngine::new);
     }
+  }
 }

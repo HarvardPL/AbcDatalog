@@ -8,18 +8,18 @@ package edu.harvard.seas.pl.abcdatalog.util.substitution;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -33,57 +33,56 @@ package edu.harvard.seas.pl.abcdatalog.util.substitution;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import edu.harvard.seas.pl.abcdatalog.ast.Clause;
 import edu.harvard.seas.pl.abcdatalog.ast.Head;
 import edu.harvard.seas.pl.abcdatalog.ast.PositiveAtom;
 import edu.harvard.seas.pl.abcdatalog.ast.Premise;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public final class SubstitutionUtils {
 
-	private SubstitutionUtils() {
-		throw new AssertionError("impossible");
-	}
+  private SubstitutionUtils() {
+    throw new AssertionError("impossible");
+  }
 
-	/**
-	 * Apply a substitution to the given positive atoms, adding the resulting atoms
-	 * to the provided collection (in order).
-	 * 
-	 * @param subst the substitution
-	 * @param atoms the atoms
-	 * @param acc   the collection to add the atoms to
-	 */
-	public static void applyToPositiveAtoms(Substitution subst, Iterable<PositiveAtom> atoms,
-			Collection<PositiveAtom> acc) {
-		for (PositiveAtom atom : atoms) {
-			acc.add(atom.applySubst(subst));
-		}
-	}
+  /**
+   * Apply a substitution to the given positive atoms, adding the resulting atoms to the provided
+   * collection (in order).
+   *
+   * @param subst the substitution
+   * @param atoms the atoms
+   * @param acc the collection to add the atoms to
+   */
+  public static void applyToPositiveAtoms(
+      Substitution subst, Iterable<PositiveAtom> atoms, Collection<PositiveAtom> acc) {
+    for (PositiveAtom atom : atoms) {
+      acc.add(atom.applySubst(subst));
+    }
+  }
 
-	/**
-	 * Apply a substitution to the given positive atoms, returning a list of the
-	 * resulting atoms (in order).
-	 * 
-	 * @param subst the substitution
-	 * @param atoms the atoms
-	 * @return a list of the atoms that result from applying the substitution
-	 */
-	public static List<PositiveAtom> applyToPositiveAtoms(Substitution subst, Iterable<PositiveAtom> atoms) {
-		List<PositiveAtom> ret = new ArrayList<>();
-		applyToPositiveAtoms(subst, atoms, ret);
-		return ret;
-	}
+  /**
+   * Apply a substitution to the given positive atoms, returning a list of the resulting atoms (in
+   * order).
+   *
+   * @param subst the substitution
+   * @param atoms the atoms
+   * @return a list of the atoms that result from applying the substitution
+   */
+  public static List<PositiveAtom> applyToPositiveAtoms(
+      Substitution subst, Iterable<PositiveAtom> atoms) {
+    List<PositiveAtom> ret = new ArrayList<>();
+    applyToPositiveAtoms(subst, atoms, ret);
+    return ret;
+  }
 
-	public static Clause applyToClause(Substitution subst, Clause cl) {
-		Head newHead = cl.getHead().applySubst(subst);
-		List<Premise> newBody = new ArrayList<>();
-		for (Premise p : cl.getBody()) {
-			newBody.add(p.applySubst(subst));
-		}
-		return new Clause(newHead, newBody);
-	}
-
+  public static Clause applyToClause(Substitution subst, Clause cl) {
+    Head newHead = cl.getHead().applySubst(subst);
+    List<Premise> newBody = new ArrayList<>();
+    for (Premise p : cl.getBody()) {
+      newBody.add(p.applySubst(subst));
+    }
+    return new Clause(newHead, newBody);
+  }
 }

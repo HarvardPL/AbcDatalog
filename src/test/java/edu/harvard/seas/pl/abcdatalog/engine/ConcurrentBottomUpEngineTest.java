@@ -33,39 +33,35 @@ package edu.harvard.seas.pl.abcdatalog.engine;
  * #L%
  */
 
+import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentBottomUpEngine;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent.ConcurrentBottomUpEngine;
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ConcurrentBottomUpEngineTest.MyCoreTests.class,
-        ConcurrentBottomUpEngineTest.MyUnificationTests.class,
-        ConcurrentBottomUpEngineTest.MyConjunctiveQueryTests.class
+  ConcurrentBottomUpEngineTest.MyCoreTests.class,
+  ConcurrentBottomUpEngineTest.MyUnificationTests.class,
+  ConcurrentBottomUpEngineTest.MyConjunctiveQueryTests.class
 })
 public class ConcurrentBottomUpEngineTest {
-    public static class MyCoreTests extends CoreTests {
+  public static class MyCoreTests extends CoreTests {
 
-        public MyCoreTests() {
-            super(ConcurrentBottomUpEngine::new);
-        }
-
+    public MyCoreTests() {
+      super(ConcurrentBottomUpEngine::new);
     }
+  }
 
-    public static class MyUnificationTests extends ExplicitUnificationTests {
+  public static class MyUnificationTests extends ExplicitUnificationTests {
 
-        public MyUnificationTests() {
-            super(ConcurrentBottomUpEngine::new);
-        }
-
+    public MyUnificationTests() {
+      super(ConcurrentBottomUpEngine::new);
     }
+  }
 
-    public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
+  public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
-        public MyConjunctiveQueryTests() {
-            super(ConcurrentBottomUpEngine::new);
-        }
-
+    public MyConjunctiveQueryTests() {
+      super(ConcurrentBottomUpEngine::new);
     }
+  }
 }

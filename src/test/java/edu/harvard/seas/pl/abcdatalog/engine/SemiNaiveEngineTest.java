@@ -33,48 +33,43 @@ package edu.harvard.seas.pl.abcdatalog.engine;
  * #L%
  */
 
+import edu.harvard.seas.pl.abcdatalog.engine.bottomup.sequential.SemiNaiveEngine;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import edu.harvard.seas.pl.abcdatalog.engine.bottomup.sequential.SemiNaiveEngine;
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        SemiNaiveEngineTest.MyCoreTests.class,
-        SemiNaiveEngineTest.MyUnificationTests.class,
-        SemiNaiveEngineTest.MyNegationTests.class,
-        SemiNaiveEngineTest.MyConjunctiveQueryTests.class
+  SemiNaiveEngineTest.MyCoreTests.class,
+  SemiNaiveEngineTest.MyUnificationTests.class,
+  SemiNaiveEngineTest.MyNegationTests.class,
+  SemiNaiveEngineTest.MyConjunctiveQueryTests.class
 })
 public class SemiNaiveEngineTest {
-    public static class MyCoreTests extends CoreTests {
+  public static class MyCoreTests extends CoreTests {
 
-        public MyCoreTests() {
-            super(() -> new SemiNaiveEngine(true));
-        }
-
+    public MyCoreTests() {
+      super(() -> new SemiNaiveEngine(true));
     }
+  }
 
-    public static class MyUnificationTests extends ExplicitUnificationTests {
+  public static class MyUnificationTests extends ExplicitUnificationTests {
 
-        public MyUnificationTests() {
-            super(() -> new SemiNaiveEngine(true));
-        }
-
+    public MyUnificationTests() {
+      super(() -> new SemiNaiveEngine(true));
     }
+  }
 
-    public static class MyNegationTests extends StratifiedNegationTests {
+  public static class MyNegationTests extends StratifiedNegationTests {
 
-        public MyNegationTests() {
-            super(() -> new SemiNaiveEngine(true));
-        }
-
+    public MyNegationTests() {
+      super(() -> new SemiNaiveEngine(true));
     }
+  }
 
-    public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
+  public static class MyConjunctiveQueryTests extends ConjunctiveQueryTests {
 
-        public MyConjunctiveQueryTests() {
-            super(() -> new SemiNaiveEngine(true));
-        }
-
+    public MyConjunctiveQueryTests() {
+      super(() -> new SemiNaiveEngine(true));
     }
+  }
 }

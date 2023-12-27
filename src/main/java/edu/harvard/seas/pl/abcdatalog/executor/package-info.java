@@ -1,7 +1,6 @@
 /**
- * This package contains classes that implement a Datalog executor, which is a
- * Datalog engine that runs asynchronously. New facts can be added to the engine
- * in the midst of evaluation.
+ * This package contains classes that implement a Datalog executor, which is a Datalog engine that
+ * runs asynchronously. New facts can be added to the engine in the midst of evaluation.
  */
 package edu.harvard.seas.pl.abcdatalog.executor;
 
@@ -13,18 +12,18 @@ package edu.harvard.seas.pl.abcdatalog.executor;
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the President and Fellows of Harvard College nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
