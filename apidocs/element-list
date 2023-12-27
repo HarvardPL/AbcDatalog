@@ -6,7 +6,6 @@ edu.harvard.seas.pl.abcdatalog.engine
 edu.harvard.seas.pl.abcdatalog.engine.bottomup
 edu.harvard.seas.pl.abcdatalog.engine.bottomup.concurrent
 edu.harvard.seas.pl.abcdatalog.engine.bottomup.sequential
-edu.harvard.seas.pl.abcdatalog.engine.testing
 edu.harvard.seas.pl.abcdatalog.engine.topdown
 edu.harvard.seas.pl.abcdatalog.executor
 edu.harvard.seas.pl.abcdatalog.gui
