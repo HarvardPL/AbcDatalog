@@ -39,6 +39,12 @@ Please see the [AbcDatalog website](https://abcdatalog.seas.harvard.edu/) for
 information on how to use the AbcDatalog graphical user interface and how to
 interface with AbcDatalog from Java programs.
 
+# Contributing
+
+Contributions are encouraged!
+In the past, students have contributed some great improvements to the UI.
+If you are interested in contributing, open a [GitHub issue](https://github.com/HarvardPL/AbcDatalog/issues) discussing the improvements you would like to make.
+
 # People
 
 The primary contributors to AbcDatalog are:
