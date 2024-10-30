@@ -5,7 +5,7 @@
 
 	<groupId>io.github.harvardpl</groupId>
 	<artifactId>AbcDatalog</artifactId>
-	<version>0.7.0</version>
+	<version>0.7.1</version>
 	<packaging>jar</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -14,8 +14,8 @@
 
 	<licenses>
 		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>The 3-Clause BSD License</name>
+			<url>https://opensource.org/license/bsd-3-clause</url>
 		</license>
 	</licenses>
 
