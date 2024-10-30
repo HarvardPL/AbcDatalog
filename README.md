@@ -21,15 +21,35 @@ subdirectory.
 # Requirements
 
 * Java 8+
-* Maven (v3.6.3 is known to work); necessary only for compilation
+* Maven (v3.6.3 is known to work); not necessary for running the pre-built JAR
 
-# Compilation
+# Setup
+
+## Pre-Built JAR
 
 A pre-built JAR can be found on the
-[Releases](https://github.com/HarvardPL/AbcDatalog/releases) section of GitHub.
+[Releases](https://github.com/HarvardPL/AbcDatalog/releases) section of the GitHub repository.
+
+## Maven Central
+
+AbcDatalog is released on [Maven Central](https://central.sonatype.com/artifact/io.github.harvardpl/AbcDatalog)
+and can be easily added as a library to another Maven project by including a
+snippet like this in that project's `pom.xml` file:
+
+```
+<dependency>
+    <groupId>io.github.harvardpl</groupId>
+    <artifactId>AbcDatalog</artifactId>
+    <version>[X.Y.Z]</version>
+</dependency>
+```
+
+Replace `[X.Y.Z]` with the most recent AbcDatalog version.
+
+## Compilation
 
 If you desire, you can compile the source code into a JAR using Maven. From
-this directory, run `mvn package` to build the archive
+the project root directory, run `mvn package` to build the archive
 `target/AbcDatalog-[X.Y.Z]-jar-with-dependencies.jar` (where `[X.Y.Z]` is the
 version number).
 
