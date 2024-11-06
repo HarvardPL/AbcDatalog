@@ -216,8 +216,16 @@ public class DatalogValidator {
       }
     }
 
+    for (Variable v : new HashSet<>(boundVars)) {
+      Term t = subst.get(v);
+      if (t instanceof Variable) {
+        boundVars.add((Variable) t);
+      }
+    }
+
     for (Variable x : possiblyUnboundVars) {
-      if (!boundVars.contains(x) && !(subst.get(x) instanceof Constant)) {
+      Term t;
+      if (!boundVars.contains(x) && !((t = subst.get(x)) instanceof Constant) && !(boundVars.contains(t))) {
         throw new DatalogValidationException(
             "Every variable in a rule must be bound, but "
                 + x

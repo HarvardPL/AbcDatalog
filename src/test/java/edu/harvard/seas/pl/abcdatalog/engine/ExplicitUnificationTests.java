@@ -150,4 +150,14 @@ public abstract class ExplicitUnificationTests extends AbstractTests {
     test("p(X) :- q(X), Y!=_. q(a).", "p(X)?", "");
     throw new DatalogValidationException();
   }
+
+  @Test
+  public void testVariablesBoundByUnifiers1() {
+    initEngine("p(X, Y) :- q(Z, W), X = Z, W = Y.");
+  }
+
+  @Test
+  public void testVariablesBoundByUnifiers2() {
+    initEngine("p(X, Y) :- q(Z, W), Z = A, B = W, X = A, B = Y.");
+  }
 }
