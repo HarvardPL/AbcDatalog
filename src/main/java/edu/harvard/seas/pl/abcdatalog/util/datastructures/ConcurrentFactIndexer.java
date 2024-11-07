@@ -45,6 +45,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -63,6 +64,7 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
   private final Supplier<T> generator;
   private final BiConsumer<T, PositiveAtom> addFunc;
   private final Supplier<T> empty;
+  private final Function<T, Integer> size;
 
   private final ConcurrentMap<PredicateSym, AtomicReferenceArray<ConcurrentMap<Constant, T>>>
       fineIdx = Utilities.createConcurrentMap();
@@ -73,9 +75,10 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
    *
    * @param generator an anonymous function that returns a container
    * @param addFunc an anonymous function that adds a fact to a container
+   * @param size an anonymous function that gets the number of items in the container
    */
-  public ConcurrentFactIndexer(Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc) {
-    this(generator, addFunc, generator);
+  public ConcurrentFactIndexer(Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc, Function<T, Integer> size) {
+    this(generator, addFunc, generator, size);
   }
 
   /**
@@ -84,12 +87,14 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
    * @param generator an anonymous function that returns a container
    * @param addFunc an anonymous function that adds a fact to a container
    * @param empty an anonymous function that returns an empty container (such as a static instance)
+   * @param size an anonymous function that gets the number of items in the container
    */
   public ConcurrentFactIndexer(
-      Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc, Supplier<T> empty) {
+      Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc, Supplier<T> empty, Function<T, Integer> size) {
     this.generator = generator;
     this.addFunc = addFunc;
     this.empty = empty;
+    this.size = size;
   }
 
   /**
@@ -179,21 +184,20 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
 
     int bestIdx = -1;
     Term bestConst = null;
-    int maxKeySetSize = -1;
+    int minFactSetSize = Integer.MAX_VALUE;
     Term[] args = a.getArgs();
     for (int i = 0; i < args.length; ++i) {
       Term t = args[i];
-      //			if (!(t instanceof DummyTerm) && (t instanceof Constant || (s != null && (t =
-      // s.get((Variable) t)) != null))) {
       if ((t = t.accept(tv, s)) != null) {
         ConcurrentMap<Constant, T> byConstant = byPos.get(i);
         if (byConstant != null) {
-          if (!byConstant.containsKey(t)) {
+          T collection = byConstant.get(t);
+          if (collection == null) {
             return this.empty.get();
           }
-          int keySetSize = byConstant.size();
-          if (keySetSize > maxKeySetSize) {
-            maxKeySetSize = keySetSize;
+          int factSetSize = size.apply(collection);
+          if (factSetSize < minFactSetSize) {
+            minFactSetSize = factSetSize;
             bestIdx = i;
             bestConst = t;
           }
@@ -234,7 +238,7 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
     // hand, that might end up creating a new fact indexer with an
     // inconsistent state.
     ConcurrentFactIndexer<T> r =
-        new ConcurrentFactIndexer<>(this.generator, this.addFunc, this.empty);
+        new ConcurrentFactIndexer<>(this.generator, this.addFunc, this.empty, this.size);
     for (PredicateSym pred : this.coarseIdx.keySet()) {
       r.addAll(this.indexInto(pred));
     }

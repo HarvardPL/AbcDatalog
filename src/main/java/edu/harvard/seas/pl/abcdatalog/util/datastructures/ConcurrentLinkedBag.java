@@ -34,6 +34,7 @@ package edu.harvard.seas.pl.abcdatalog.util.datastructures;
  */
 
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -44,6 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ConcurrentLinkedBag<T> implements Iterable<T> {
   private AtomicReference<Node> head = new AtomicReference<>();
+  private AtomicInteger size = new AtomicInteger();
 
   /** A node in the linked list. */
   public class Node {
@@ -85,7 +87,17 @@ public class ConcurrentLinkedBag<T> implements Iterable<T> {
       h = this.head.get();
       n = new Node(e, h);
     } while (!this.head.compareAndSet(h, n));
+    // This is not updated atomically with the addition of the element and can thus only be considered a lower bound
+    // for the set size. However, consumers cannot tell the difference since there is no way to transactionally read
+    // the set size and traverse the set anyway.
+    size.incrementAndGet();
   }
+
+  /**
+   * Returns the number of elements that have been added to the set.
+   * @return the size of the set
+   */
+  public Integer size() { return size.get(); }
 
   /**
    * Returns the head of the linked-list that backs this bag, or null if there is no head.
