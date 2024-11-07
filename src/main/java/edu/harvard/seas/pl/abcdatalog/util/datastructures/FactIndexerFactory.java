@@ -51,7 +51,7 @@ public final class FactIndexerFactory {
    */
   public static ConcurrentFactIndexer<Set<PositiveAtom>> createConcurrentSetFactIndexer() {
     return new ConcurrentFactIndexer<>(
-        () -> Utilities.createConcurrentSet(), (set, fact) -> set.add(fact), (set) -> set.size());
+        Utilities::createConcurrentSet, Set::add, Set::size);
   }
 
   /**
@@ -61,6 +61,6 @@ public final class FactIndexerFactory {
    */
   public static ConcurrentFactIndexer<Queue<PositiveAtom>> createConcurrentQueueFactIndexer() {
     return new ConcurrentFactIndexer<>(
-        () -> new ConcurrentLinkedQueue<>(), (queue, fact) -> queue.add(fact), (queue) -> queue.size());
+        ConcurrentLinkedQueue::new, Queue::add, Queue::size);
   }
 }

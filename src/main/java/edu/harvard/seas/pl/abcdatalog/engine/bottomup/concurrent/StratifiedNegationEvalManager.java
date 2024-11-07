@@ -83,10 +83,10 @@ public class StratifiedNegationEvalManager implements EvalManager {
 
   private final ConcurrentFactIndexer<ConcurrentLinkedBag<PositiveAtom>> facts =
       new ConcurrentFactIndexer<>(
-          () -> new ConcurrentLinkedBag<>(),
-          (bag, atom) -> bag.add(atom),
-          () -> ConcurrentLinkedBag.emptyBag(),
-          (bag) -> bag.size());
+          ConcurrentLinkedBag::new,
+          ConcurrentLinkedBag::add,
+          ConcurrentLinkedBag::emptyBag,
+          ConcurrentLinkedBag::size);
   private final ConcurrentFactTrie trie = new ConcurrentFactTrie();
 
   private final Map<PredicateSym, Set<Integer>> relevantStrataByPred = new HashMap<>();
