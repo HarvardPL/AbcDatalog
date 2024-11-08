@@ -9,19 +9,19 @@ script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 cd "$script_dir"
 
 git checkout master
+mvn clean
 # Make sure all files have licenses
 mvn license:update-file-header
 # Make sure code is formatted consistently
 mvn com.spotify.fmt:fmt-maven-plugin:format
-if [ -n "$(git status --porcelain)" ]; then
-    echo "Directory not clean"
-    exit 1
-fi
 # Make sure code builds
 mvn package
 # Generate Javadocs
 mvn javadoc:javadoc -Prelease
-git stash
+if [ -n "$(git status --porcelain)" ]; then
+    echo "Directory not clean"
+    exit 1
+fi
 
 # Update the Javadocs on the website
 git checkout gh-pages
@@ -32,7 +32,6 @@ git commit -m "Update Javadocs."
 git push
 
 git checkout master
-git stash pop
 
 # To upload the new release to Maven Central, run:
 #
