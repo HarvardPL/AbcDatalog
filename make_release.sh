@@ -5,16 +5,20 @@
 
 set -e
 
-script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 cd "$script_dir"
 
 git checkout master
-# Make sure code builds
-mvn package
 # Make sure all files have licenses
 mvn license:update-file-header
 # Make sure code is formatted consistently
 mvn com.spotify.fmt:fmt-maven-plugin:format
+if [ -n "$(git status --porcelain)" ]; then
+    echo "Directory not clean"
+    exit 1
+fi
+# Make sure code builds
+mvn package
 # Generate Javadocs
 mvn javadoc:javadoc -Prelease
 git stash

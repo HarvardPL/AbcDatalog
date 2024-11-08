@@ -77,7 +77,8 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
    * @param addFunc an anonymous function that adds a fact to a container
    * @param size an anonymous function that gets the number of items in the container
    */
-  public ConcurrentFactIndexer(Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc, Function<T, Integer> size) {
+  public ConcurrentFactIndexer(
+      Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc, Function<T, Integer> size) {
     this(generator, addFunc, generator, size);
   }
 
@@ -90,7 +91,10 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
    * @param size an anonymous function that gets the number of items in the container
    */
   public ConcurrentFactIndexer(
-      Supplier<T> generator, BiConsumer<T, PositiveAtom> addFunc, Supplier<T> empty, Function<T, Integer> size) {
+      Supplier<T> generator,
+      BiConsumer<T, PositiveAtom> addFunc,
+      Supplier<T> empty,
+      Function<T, Integer> size) {
     this.generator = generator;
     this.addFunc = addFunc;
     this.empty = empty;
