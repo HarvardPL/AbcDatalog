@@ -68,28 +68,28 @@ public class TermVisitorBuilder<I, O> {
   }
 
   private class Visitor implements TermVisitor<I, O> {
-    private final BiFunction<Variable, I, O> onVariable;
-    private final BiFunction<Constant, I, O> onConstant;
+    private final BiFunction<Variable, I, O> _onVariable;
+    private final BiFunction<Constant, I, O> _onConstant;
     private final BiFunction<Term, I, O> otherwise;
 
     public Visitor(BiFunction<Term, I, O> otherwise) {
-      this.onVariable = TermVisitorBuilder.this.onVariable;
-      this.onConstant = TermVisitorBuilder.this.onConstant;
+      this._onVariable = TermVisitorBuilder.this.onVariable;
+      this._onConstant = TermVisitorBuilder.this.onConstant;
       this.otherwise = otherwise;
     }
 
     @Override
     public O visit(Variable t, I state) {
-      if (onVariable != null) {
-        return onVariable.apply(t, state);
+      if (_onVariable != null) {
+        return _onVariable.apply(t, state);
       }
       return otherwise.apply(t, state);
     }
 
     @Override
     public O visit(Constant t, I state) {
-      if (onConstant != null) {
-        return onConstant.apply(t, state);
+      if (_onConstant != null) {
+        return _onConstant.apply(t, state);
       }
       return otherwise.apply(t, state);
     }

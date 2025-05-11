@@ -92,58 +92,58 @@ public class PremiseVisitorBuilder<I, O> {
   }
 
   private class Visitor implements PremiseVisitor<I, O> {
-    private final BiFunction<PositiveAtom, I, O> onPositiveAtom;
-    private final BiFunction<NegatedAtom, I, O> onNegatedAtom;
-    private final BiFunction<BinaryUnifier, I, O> onBinaryUnifier;
-    private final BiFunction<BinaryDisunifier, I, O> onBinaryDisunifier;
-    private BiFunction<AnnotatedAtom, I, O> onAnnotatedAtom;
+    private final BiFunction<PositiveAtom, I, O> _onPositiveAtom;
+    private final BiFunction<NegatedAtom, I, O> _onNegatedAtom;
+    private final BiFunction<BinaryUnifier, I, O> _onBinaryUnifier;
+    private final BiFunction<BinaryDisunifier, I, O> _onBinaryDisunifier;
+    private BiFunction<AnnotatedAtom, I, O> _onAnnotatedAtom;
     private final BiFunction<Premise, I, O> otherwise;
 
     public Visitor(BiFunction<Premise, I, O> otherwise) {
-      this.onPositiveAtom = PremiseVisitorBuilder.this.onPositiveAtom;
-      this.onNegatedAtom = PremiseVisitorBuilder.this.onNegatedAtom;
-      this.onBinaryUnifier = PremiseVisitorBuilder.this.onBinaryUnifier;
-      this.onBinaryDisunifier = PremiseVisitorBuilder.this.onBinaryDisunifier;
-      this.onAnnotatedAtom = PremiseVisitorBuilder.this.onAnnotatedAtom;
+      this._onPositiveAtom = PremiseVisitorBuilder.this.onPositiveAtom;
+      this._onNegatedAtom = PremiseVisitorBuilder.this.onNegatedAtom;
+      this._onBinaryUnifier = PremiseVisitorBuilder.this.onBinaryUnifier;
+      this._onBinaryDisunifier = PremiseVisitorBuilder.this.onBinaryDisunifier;
+      this._onAnnotatedAtom = PremiseVisitorBuilder.this.onAnnotatedAtom;
       this.otherwise = otherwise;
     }
 
     @Override
     public O visit(PositiveAtom atom, I state) {
-      if (this.onPositiveAtom != null) {
-        return this.onPositiveAtom.apply(atom, state);
+      if (this._onPositiveAtom != null) {
+        return this._onPositiveAtom.apply(atom, state);
       }
       return this.otherwise.apply(atom, state);
     }
 
     @Override
     public O visit(BinaryUnifier u, I state) {
-      if (this.onBinaryUnifier != null) {
-        return this.onBinaryUnifier.apply(u, state);
+      if (this._onBinaryUnifier != null) {
+        return this._onBinaryUnifier.apply(u, state);
       }
       return this.otherwise.apply(u, state);
     }
 
     @Override
     public O visit(BinaryDisunifier u, I state) {
-      if (this.onBinaryDisunifier != null) {
-        return this.onBinaryDisunifier.apply(u, state);
+      if (this._onBinaryDisunifier != null) {
+        return this._onBinaryDisunifier.apply(u, state);
       }
       return this.otherwise.apply(u, state);
     }
 
     @Override
     public O visit(NegatedAtom atom, I state) {
-      if (this.onNegatedAtom != null) {
-        return this.onNegatedAtom.apply(atom, state);
+      if (this._onNegatedAtom != null) {
+        return this._onNegatedAtom.apply(atom, state);
       }
       return this.otherwise.apply(atom, state);
     }
 
     @Override
     public O visit(AnnotatedAtom atom, I state) {
-      if (this.onAnnotatedAtom != null) {
-        return this.onAnnotatedAtom.apply(atom, state);
+      if (this._onAnnotatedAtom != null) {
+        return this._onAnnotatedAtom.apply(atom, state);
       }
       return this.otherwise.apply(atom, state);
     }
