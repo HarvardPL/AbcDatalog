@@ -127,6 +127,7 @@ public class PositiveAtom implements Premise, Head {
    * @param subst the substitution
    * @return a new atom with the substitution applied
    */
+  @Override
   public PositiveAtom applySubst(Substitution subst) {
     return create(this.pred, subst.apply(this.args));
   }

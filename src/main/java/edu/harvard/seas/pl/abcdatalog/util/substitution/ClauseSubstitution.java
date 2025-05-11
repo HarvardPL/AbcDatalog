@@ -150,6 +150,7 @@ public class ClauseSubstitution implements ConstOnlySubstitution {
         new Constant[subst.length], this.index, this.indexByConj, 0, this.bodySize);
   }
 
+  @Override
   public boolean add(Variable x, Constant c) {
     Integer idx = this.index.get(x);
     assert idx != null && idx == this.pos;
@@ -157,6 +158,7 @@ public class ClauseSubstitution implements ConstOnlySubstitution {
     return true;
   }
 
+  @Override
   public Constant get(Variable x) {
     Integer idx = this.index.get(x);
     if (idx == null || idx >= this.pos) {
