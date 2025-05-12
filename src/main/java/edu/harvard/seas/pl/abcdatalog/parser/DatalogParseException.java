@@ -34,7 +34,6 @@ package edu.harvard.seas.pl.abcdatalog.parser;
  */
 
 /** An exception signifying a parsing error. */
-@SuppressWarnings("serial")
 public class DatalogParseException extends Exception {
   /** Constructs an exception signifying a parsing error. */
   public DatalogParseException() {}

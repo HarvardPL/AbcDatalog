@@ -106,6 +106,7 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
    *
    * @param fact the fact
    */
+  @Override
   public void add(PositiveAtom fact) {
     assert fact.isGround();
     T rough = this.coarseIdx.get(fact.getPred());
@@ -156,6 +157,7 @@ public class ConcurrentFactIndexer<T extends Iterable<PositiveAtom>> implements 
    *
    * @param facts the facts
    */
+  @Override
   public void addAll(Iterable<PositiveAtom> facts) {
     for (PositiveAtom a : facts) {
       this.add(a);

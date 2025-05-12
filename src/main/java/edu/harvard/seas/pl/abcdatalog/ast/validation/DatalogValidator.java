@@ -262,18 +262,22 @@ public class DatalogValidator {
       this.idbPredicateSymbols = idbPredicateSymbols;
     }
 
+    @Override
     public Set<ValidClause> getRules() {
       return this.rules;
     }
 
+    @Override
     public Set<PositiveAtom> getInitialFacts() {
       return this.initialFacts;
     }
 
+    @Override
     public Set<PredicateSym> getEdbPredicateSyms() {
       return this.edbPredicateSymbols;
     }
 
+    @Override
     public Set<PredicateSym> getIdbPredicateSyms() {
       return this.idbPredicateSymbols;
     }

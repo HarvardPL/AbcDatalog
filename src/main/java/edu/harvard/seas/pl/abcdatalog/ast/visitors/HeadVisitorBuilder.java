@@ -61,18 +61,18 @@ public class HeadVisitorBuilder<I, O> {
   }
 
   private class Visitor implements HeadVisitor<I, O> {
-    private final BiFunction<PositiveAtom, I, O> onPositiveAtom;
+    private final BiFunction<PositiveAtom, I, O> _onPositiveAtom;
     private final BiFunction<Head, I, O> otherwise;
 
     public Visitor(BiFunction<Head, I, O> otherwise) {
-      this.onPositiveAtom = HeadVisitorBuilder.this.onPositiveAtom;
+      this._onPositiveAtom = HeadVisitorBuilder.this.onPositiveAtom;
       this.otherwise = otherwise;
     }
 
     @Override
     public O visit(PositiveAtom atom, I state) {
-      if (this.onPositiveAtom != null) {
-        return this.onPositiveAtom.apply(atom, state);
+      if (this._onPositiveAtom != null) {
+        return this._onPositiveAtom.apply(atom, state);
       }
       return this.otherwise.apply(atom, state);
     }
