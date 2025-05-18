@@ -33,7 +33,6 @@ package edu.harvard.seas.pl.abcdatalog.ast.validation;
  * #L%
  */
 
-@SuppressWarnings("serial")
 public class DatalogValidationException extends Exception {
 
   public DatalogValidationException() {}

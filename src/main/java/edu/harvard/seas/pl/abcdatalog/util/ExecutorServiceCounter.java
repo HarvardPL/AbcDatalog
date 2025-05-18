@@ -75,7 +75,6 @@ public class ExecutorServiceCounter {
    *
    * @param task the task
    */
-  @SuppressWarnings("serial")
   public void submitTask(Runnable task) {
     this.tasks.incrementAndGet();
     if (RecursiveAction.inForkJoinPool()) {

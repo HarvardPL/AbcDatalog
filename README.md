@@ -20,8 +20,8 @@ subdirectory.
 
 # Requirements
 
-* Java 8+
-* Maven (v3.6.3 is known to work); not necessary for running the pre-built JAR
+* Java 21+
+* Maven (v3.9.9 is known to work); not necessary for running the pre-built JAR
 
 # Setup
 

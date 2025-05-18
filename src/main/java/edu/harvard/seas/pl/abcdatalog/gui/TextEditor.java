@@ -38,7 +38,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
-@SuppressWarnings("serial")
 public class TextEditor extends JTextArea {
   TextEditor(int rows, int columns) {
     this.setRows(rows);

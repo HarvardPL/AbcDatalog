@@ -50,15 +50,14 @@ public abstract class StratifiedNegationTests extends AbstractTests {
 
   @Test(expected = DatalogValidationException.class)
   public void TestUnstratifiable1() throws DatalogValidationException {
-    @SuppressWarnings("unused")
-    DatalogEngine e = initEngineUnsafe("p :- not q. q :- not p.");
+    // DatalogEngine e =
+    initEngineUnsafe("p :- not q. q :- not p.");
   }
 
   @Test(expected = DatalogValidationException.class)
   public void TestUnstratifiable2() throws DatalogValidationException {
-    @SuppressWarnings("unused")
-    DatalogEngine e =
-        initEngineUnsafe("p(X) :- not q(X), edb(X). q(X) :- not p(X), edb(X). edb(a).");
+    // DatalogEngine e =
+    initEngineUnsafe("p(X) :- not q(X), edb(X). q(X) :- not p(X), edb(X). edb(a).");
   }
 
   public void TestStratifiable() {

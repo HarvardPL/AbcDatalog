@@ -67,7 +67,6 @@ import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
 /** A GUI with a Datalog editor and interpreter. */
-@SuppressWarnings("serial")
 public class DatalogGui extends JFrame {
   private final TextEditor program;
   private final JTextArea results;
